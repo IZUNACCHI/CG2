@@ -18,8 +18,8 @@
 
 int main(int argc, char** argv)
 {
-	float screenWidth = 800;
-	float screenHeight = 600;
+	float screenWidth = 640;
+	float screenHeight = 480;
 
 
 	SDL_Init(SDL_INIT_VIDEO);

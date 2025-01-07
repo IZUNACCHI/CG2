@@ -24,9 +24,6 @@
     <ClCompile Include="sources\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="backup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sources\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -79,5 +76,7 @@
     <None Include="shaders\phongfragmentmaterialshader.glsl" />
     <None Include="shaders\phongvertexmaterialshader.glsl" />
     <None Include="SDL2.dll" />
+    <None Include="vertexshader.glsl" />
+    <None Include="fragmentshader.glsl" />
   </ItemGroup>
 </Project>

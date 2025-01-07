@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Vendor\GLM\include;$(SolutionDir)CG_Project1\headers;%(AdditionalIncludeDirectories);$(SolutionDir)Vendor\SDL2\include;$(SolutionDir)Vendor\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Vendor\GLM\include;$(SolutionDir)CG_Project1\headers;%(AdditionalIncludeDirectories);$(SolutionDir)Vendor\SDL2\include;$(SolutionDir)Vendor\GLAD\include;$(SolutionDir)Vendor\GLAD\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Vendor\GLM\include;$(SolutionDir)CG_Project1\headers;$(SolutionDir)Vendor\SDL2\include;$(SolutionDir)Vendor\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Vendor\GLM\include;$(SolutionDir)CG_Project1\headers;$(SolutionDir)Vendor\SDL2\include;$(SolutionDir)Vendor\GLAD\include;$(SolutionDir)Vendor\SDL2\include;$(SolutionDir)Vendor\GLAD\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +133,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="backup.cpp" />
     <ClCompile Include="sources\loader_texture.cpp" />
     <ClCompile Include="sources\camera.cpp" />
     <ClCompile Include="glad.c" />
@@ -154,6 +153,7 @@
     <ClInclude Include="headers\loader_wavefront.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="fragmentshader.glsl" />
     <None Include="SDL2.dll" />
     <None Include="shaders\gouraudfragmentmaterialshader.glsl" />
     <None Include="shaders\gouraudvertexmaterialshader.glsl" />
@@ -163,6 +163,7 @@
     <None Include="shaders\phongfragmentshader.glsl" />
     <None Include="shaders\phongvertexmaterialshader.glsl" />
     <None Include="shaders\phongvertexshader.glsl" />
+    <None Include="vertexshader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
