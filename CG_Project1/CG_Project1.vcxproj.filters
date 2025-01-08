@@ -39,9 +39,6 @@
     <ClCompile Include="sources\loader_texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="backup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -62,10 +59,10 @@
     <ClInclude Include="headers\loader_wavefront.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\object_class.hpp">
+    <ClInclude Include="headers\loader_texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\loader_texture.hpp">
+    <ClInclude Include="headers\object_class.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

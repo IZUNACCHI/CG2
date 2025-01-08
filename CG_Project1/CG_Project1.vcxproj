@@ -138,7 +138,6 @@
     <ClCompile Include="sources\camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="sources\loader_wavefront.cpp" />
-    <ClCompile Include="sources\Main.cpp" />
     <ClCompile Include="sources\object_class.cpp" />
     <ClCompile Include="sources\shader.cpp" />
     <ClCompile Include="sources\stbImage.cpp" />
