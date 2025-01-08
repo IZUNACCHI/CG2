@@ -42,6 +42,9 @@
     <ClCompile Include="sources\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="backup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\stb_image.h">
@@ -78,5 +81,7 @@
     <None Include="SDL2.dll" />
     <None Include="vertexshader.glsl" />
     <None Include="fragmentshader.glsl" />
+    <None Include="shaders\fragmentshader.glsl" />
+    <None Include="shaders\vertexshader.glsl" />
   </ItemGroup>
 </Project>

@@ -51,6 +51,8 @@ int main(int argc, char** argv)
 	Shader phongProgram("shaders/phongvertexmaterialshader.glsl", "shaders/phongfragmentmaterialshader.glsl");
 	Shader lightCubeProgram("shaders/lightvertex.glsl", "shaders/lightfragment.glsl");
 
+	Shader shaderProgram("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl");
+
 	bool currentShader = true; //default phong
 
 	// Vertices for the "lamp".

@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="backup.cpp" />
     <ClCompile Include="sources\loader_texture.cpp" />
     <ClCompile Include="sources\camera.cpp" />
     <ClCompile Include="glad.c" />
@@ -155,6 +156,7 @@
   <ItemGroup>
     <None Include="fragmentshader.glsl" />
     <None Include="SDL2.dll" />
+    <None Include="shaders\fragmentshader.glsl" />
     <None Include="shaders\gouraudfragmentmaterialshader.glsl" />
     <None Include="shaders\gouraudvertexmaterialshader.glsl" />
     <None Include="shaders\lightfragment.glsl" />
@@ -163,6 +165,7 @@
     <None Include="shaders\phongfragmentshader.glsl" />
     <None Include="shaders\phongvertexmaterialshader.glsl" />
     <None Include="shaders\phongvertexshader.glsl" />
+    <None Include="shaders\vertexshader.glsl" />
     <None Include="vertexshader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
