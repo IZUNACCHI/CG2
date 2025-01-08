@@ -1,3 +1,4 @@
+#pragma once
 #include "object_class.hpp"
 
 Object::Object(const char* texfile, float width, float height, std::vector<Object>& objects, unsigned int& objectCount)

@@ -1,3 +1,4 @@
+#pragma once
 #include "loader_wavefront.hpp"
 #include "vboindexer.hpp"
 
