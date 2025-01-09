@@ -1,17 +1,22 @@
 #include "loader_texture.hpp"
 
-void LoadTexture(const char* fileName, std::vector<GLuint>& textures, unsigned int& textureCount, Object obj)
+void LoadTexture(const char* fileName, GLuint& texture, int& tex_width, int& tex_height)
 {
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load(fileName, &width, &height, &nrChannels, 0);
+	stbi_set_flip_vertically_on_load(true);
+
+	int nrChannels;
+	unsigned char* data = stbi_load(fileName, &tex_width, &tex_height, &nrChannels, 0);
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -19,10 +24,8 @@ void LoadTexture(const char* fileName, std::vector<GLuint>& textures, unsigned i
 		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
-	obj.SaveTexSize(width, height);
-	textureCount++;
-	textures.reserve(textureCount);
 };
+
 
 //SDL_Texture* LoadTexture(std::string fileName, SDL_Renderer* renderTarget, std::vector<GLuint>& textures, unsigned int& textureCount)
 //{

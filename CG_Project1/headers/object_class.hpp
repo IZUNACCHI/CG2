@@ -13,10 +13,8 @@
 class Object
 {
 public:
-	Object(const char* texfile, float width, float height, std::vector<Object>& objects, unsigned int& objectCount);
-
-	void PopulateVertices();
-	void SaveTexSize(int texWidth, int texHeight);
+	Object(const char* texfile, float width, float height, std::vector<Object>& objects);
+	Object(const char* texfile, float width, float height, std::vector<Object>& objects, float x, float y);
 
 	void translate(float pos_x, float pos_y);
 
@@ -26,24 +24,36 @@ public:
 	size_t indexBufferSize();
 	unsigned int* indices();
 
-	const char* texture();
+	GLuint texture();
+	GLuint vao();
 
 	float frameWidth();
 	float frameHeight();
 	int textureWidth();
 	int textureHeight();
+
+	void printVs();
+
+	float frameOffset_x = 0;
+	float frameOffset_y = 0;
+	glm::mat4 m_model;
+
+	static unsigned int objectCount;
 	
 	~Object() {};
 
 private:
-	glm::mat4 m_model;
 	std::vector<float> m_vertices;
-	std::vector<unsigned int> m_indices{ 0, 1, 3, 1, 2, 3 };
-	const char* m_texture;
+	std::vector<unsigned int> m_indices;
+
 	float m_width;
 	float m_height;
+
 	int m_textureWidth;
 	int m_textureHeight;
 	float m_frameWidth;
 	float m_frameHeight;
+	
+	GLuint m_texture;
+	GLuint m_vao;
 };

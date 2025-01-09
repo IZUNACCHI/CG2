@@ -50,35 +50,27 @@ int main(int argc, char** argv)
 	Shader shaderProgram("shaders/vertexshader.glsl", "shaders/fragmentshader.glsl");
 
 	std::vector<Object> objects;
-	unsigned int objectCount = 0;
-
-	std::vector<GLuint> textures;
-	unsigned int textureCount = 0;
+	//unsigned int objectCount = 0;
 
 	std::vector<float> vertices;
 	std::vector<unsigned int> indices;
 
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
+	Object drone("resources/graphics/graphics/drone.bmp", 32, 32, objects);
+	objects.push_back(drone);
 
-	std::vector<GLuint> VAOs;
-	VAOs.reserve(objectCount);
+	Object rusher("resources/graphics/graphics/rusher.bmp", 64, 32, objects, 0.5f, 0.0f);
+	//Object rusher("resources/graphics/graphics/rusher.bmp", 64, 32, objects);
+	objects.push_back(rusher);
+	//rusher.m_model = glm::translate(rusher.m_model, glm::vec3(0.5f, 0.0f, 0.0f));
 
-	size_t vbo_size = 4 * objectCount;
-	size_t ibo_size = 6 * objectCount;
+	size_t vbo_size = 0;
+	size_t ibo_size = 0;
 
-	for (unsigned int i = 0; i < objectCount; i++)
+	for (unsigned int i = 0; i < Object::objectCount; i++)
 	{
-		GLuint vao;
-		VAOs.push_back(vao);
-
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		stbi_set_flip_vertically_on_load(true);
-		LoadTexture(objects[i].texture(), textures, textureCount, objects[i]);
-		objects[i].PopulateVertices();
-		textures.push_back(texture);
+		vbo_size += objects[i].vertexBufferSize();
+		ibo_size += objects[i].indexBufferSize();
 	}
 
 	GLuint vbo;
@@ -87,13 +79,12 @@ int main(int argc, char** argv)
 	glBufferData(GL_ARRAY_BUFFER, vbo_size * sizeof(float), 0, GL_STATIC_DRAW);
 
 	size_t vertexbufferoffset = 0;
-	for (unsigned int i = 0; i < objectCount; i++)
+	for (unsigned int i = 0; i < Object::objectCount; i++)
 	{
-		std::cout << i << std::endl;
-		glBufferSubData(GL_ARRAY_BUFFER, vertexbufferoffset * sizeof(float),	// offset
-											4 * sizeof(float),					// size
-												objects[i].vertices());			// data
-		vertexbufferoffset += 4;
+		glBufferSubData(GL_ARRAY_BUFFER, vertexbufferoffset * sizeof(float),						// offset
+											objects[i].vertexBufferSize() * sizeof(float),			// size
+												objects[i].vertices());								// data
+		vertexbufferoffset += objects[i].vertexBufferSize();
 	}
 
 	GLuint ibo;
@@ -102,28 +93,27 @@ int main(int argc, char** argv)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibo_size * sizeof(unsigned int), 0, GL_STATIC_DRAW);
 
 	size_t indexbufferoffset = 0;
-	for (unsigned int i = 0; i < objectCount; i++)
+	for (unsigned int i = 0; i < Object::objectCount; i++)
 	{
 		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexbufferoffset * sizeof(unsigned int),					// offset
-													6 * sizeof(unsigned int),								// size
+													objects[i].indexBufferSize() * sizeof(unsigned int),	// size
 														objects[i].indices());								// data
-		indexbufferoffset += 6;
+		indexbufferoffset += objects[i].indexBufferSize();
 	}
 
 	vertexbufferoffset = 0;
 	indexbufferoffset = 0;
-	for (unsigned int i = 0; i < objectCount; i++)
+	for (unsigned int i = 0; i < Object::objectCount; i++)
 	{
-		glGenVertexArrays(1, &VAOs[i]);
-		glBindVertexArray(VAOs[i]);
+		glBindVertexArray(objects[i].vao());
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 		shaderProgram.setVertexAttribPointer("position", 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(vertexbufferoffset * sizeof(float)));
-		shaderProgram.setVertexAttribPointer("texCoord", 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)((vertexbufferoffset * sizeof(float)) + (3 * sizeof(float))));
+		shaderProgram.setVertexAttribPointer("texCoord", 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)((vertexbufferoffset * sizeof(float)) + (2 * sizeof(float))));
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
-		vertexbufferoffset += 4;
+		vertexbufferoffset += objects[i].vertexBufferSize();
 	}
 
 	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
@@ -131,12 +121,11 @@ int main(int argc, char** argv)
 	glm::mat4 view;
 	view = camera.getViewMatrix();
 
-	glm::mat4 model(1.0f);
-	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+	//glm::mat4 model(1.0f);
+	//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
 
 	glm::mat4 projection;
 	projection = glm::ortho(0.0f, screenWidth, 0.0f, screenHeight, 0.1f, 100.0f);
-
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -149,12 +138,16 @@ int main(int argc, char** argv)
 	float lastFrameTime = start; // Time of last frame
 	float frameTime = 0.0f;
 
-	std::vector<float> frameOffset{ 0, 0 };
+	//std::vector<float> frameOffset{ 0, 0 };
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	bool isRunning = true;
+
+	bool animUpdate = false;
+
+	std::cout << Object::objectCount << std::endl;
 
 	while (isRunning) // render loop
 	{
@@ -171,45 +164,53 @@ int main(int argc, char** argv)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//view = camera.getViewMatrix();
-		//projection = glm::perspective(glm::radians(camera.getFov()), screenWidth / screenHeight, 0.1f, 100.0f);
+		shaderProgram.use();
+
+		view = camera.getViewMatrix();
+		projection = glm::ortho(0.0f, screenWidth, 0.0f, screenHeight, 0.1f, 100.0f);
 
 		glActiveTexture(GL_TEXTURE0);
 
 		frameTime += deltaTime;
 
-		indexbufferoffset = 0;
-		for (unsigned int i = 0; i < objectCount; i++)
+		if (frameTime >= 0.1f)
 		{
-			glBindVertexArray(VAOs[i]);
+			animUpdate = true;
+		}
 
-			glBindTexture(GL_TEXTURE_2D, textures[i]);
+		indexbufferoffset = 0;
+		for (unsigned int i = 0; i < Object::objectCount; i++)
+		{
+			glBindVertexArray(objects[i].vao());
 
-			shaderProgram.setMat4("model", objects[i].model());
+			glBindTexture(GL_TEXTURE_2D, objects[i].texture());
 
-			if (frameTime >= 0.1f)
+			if (animUpdate)
 			{
 				frameTime = 0.0f;
-				frameOffset[0] += objects[i].frameWidth();
+				objects[i].frameOffset_x += objects[i].frameWidth();
 
-				if (frameOffset[0] >= 1)
+				if (objects[i].frameOffset_x >= 1)
 				{
-					frameOffset[0] = 0.0f;
-					frameOffset[1] -= objects[i].frameHeight();
+					objects[i].frameOffset_x = 0.0f;
+					objects[i].frameOffset_y -= objects[i].frameHeight();
 
-					if (frameOffset[1] <= 0)
+					if (objects[i].frameOffset_y <= -1)
 					{
-						frameOffset[1] = 0.0f;
+						objects[i].frameOffset_y = 0.0f;
 					}
 				}
 			}
-			shaderProgram.set2Float("frameOffset", frameOffset[0], frameOffset[1]);
+			shaderProgram.set2Float("frameOffset", objects[i].frameOffset_x, objects[i].frameOffset_y);
+			shaderProgram.setMat4("model", objects[i].model());
 
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(indexbufferoffset * sizeof(unsigned int)));
+			glDrawElements(GL_TRIANGLES, objects[i].indexBufferSize(), GL_UNSIGNED_INT, (void*)(indexbufferoffset * sizeof(unsigned int)));
 			glBindVertexArray(0);
 
-			indexbufferoffset += 6;
+			indexbufferoffset += objects[i].indexBufferSize();
 		}
+
+		animUpdate = false;
 
 		SDL_GL_SwapWindow(window);
 	}

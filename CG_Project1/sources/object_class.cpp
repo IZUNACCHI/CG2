@@ -1,15 +1,61 @@
 #pragma once
 #include "object_class.hpp"
+#include "loader_texture.hpp"
 
-Object::Object(const char* texfile, float width, float height, std::vector<Object>& objects, unsigned int& objectCount)
-	: m_model{ glm::mat4(1.0f) }, m_texture{ texfile }, m_width{ width }, m_height{ height }, m_textureWidth{}, m_textureHeight{}, m_frameWidth{}, m_frameHeight{}
+void PopulateVertices(std::vector<float>& vertices, float sprite_w, float sprite_h, float frame_w, float frame_h)
 {
+	const float pos_x{ (sprite_w) / 640 };
+	const float pos_y{ (sprite_h) / 480 };
+
+	vertices = {
+		//vertex coords		//texture coords
+		 pos_x,  pos_y,		frame_w,	1.0f,			//top right
+		 pos_x, -pos_y,		frame_w,	1 - frame_h,	//bottom right
+		-pos_x, -pos_y,		0.0f,		1- frame_h,		//bottom left
+		-pos_x,	 pos_y,		0.0f,		1.0f			//top left
+	};
+}
+
+void Translate(glm::mat4& model, glm::vec3 transPos)
+{
+	glm::translate(model, transPos);
+}
+
+Object::Object(const char* texfile, float width, float height, std::vector<Object>& objects)
+	:m_model{ glm::mat4(1.0f) }, m_width{ width }, m_height{ height }, m_indices{ 0, 1, 3, 1, 2, 3 }, m_texture{}, m_vao{}
+{
+	LoadTexture(texfile, m_texture, m_textureWidth, m_textureHeight);
+
+	glGenVertexArrays(1, &m_vao);
+
+	m_frameWidth = { m_width / m_textureWidth };
+	m_frameHeight = { m_height / m_textureHeight };
+
+	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight);
 	objectCount++;
 	objects.reserve(objectCount);
 }
+
+Object::Object(const char* texfile, float width, float height, std::vector<Object>& objects, float x, float y)
+	:m_model{ glm::mat4(1.0f) }, m_width{ width }, m_height{ height }, m_indices{ 0, 1, 3, 1, 2, 3 }, m_texture{}, m_vao{}
+{
+	LoadTexture(texfile, m_texture, m_textureWidth, m_textureHeight);
+
+	glGenVertexArrays(1, &m_vao);
+
+	m_frameWidth = { m_width / m_textureWidth };
+	m_frameHeight = { m_height / m_textureHeight };
+
+	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight);
+	objectCount++;
+	objects.reserve(objectCount);
+
+	m_model = glm::translate(m_model, glm::vec3(x, y, 0.0f));
+}
+
 void Object::translate(float pos_x, float pos_y)
 {
-	m_model = glm::translate(m_model, glm::vec3(pos_x, pos_y, 0.0));
+	Translate(m_model, glm::vec3(pos_x, pos_y, 0.0f));
 }
 
 glm::mat4 Object::model()
@@ -37,9 +83,14 @@ unsigned int* Object::indices()
 	return m_indices.data();
 }
 
-const char* Object::texture()
+GLuint Object::texture()
 {
 	return m_texture;
+}
+
+GLuint Object::vao()
+{
+	return m_vao;
 }
 
 float Object::frameWidth()
@@ -62,24 +113,12 @@ int Object::textureHeight()
 	return m_textureHeight;
 }
 
-void Object::PopulateVertices()
-{
-	const float pos_x{ m_width / 2 };
-	const float pos_y{ m_height / 2 };
-	m_frameWidth = { m_width / m_textureWidth };
-	m_frameHeight = { m_height / m_textureHeight };
+void Object::printVs() {
+	for (int i = 0; i < m_vertices.size(); i++)
+	{
+		std::cout << m_vertices[i] << std::endl;
+	}
+}
 
-	m_vertices = {
-		//vertex coords		//texture coords
-		 pos_x,  pos_y,		m_frameWidth,	1.0f,				//top right
-		 pos_x, -pos_y,		m_frameWidth,	m_frameHeight,		//bottom right
-		-pos_x, -pos_y,		0.0f,			m_frameHeight,		//bottom left
-		-pos_x,	 pos_y,		0.0f,			1.0f				//top left
-	};
-}
-void Object::SaveTexSize(int texWidth, int texHeight)
-{
-	m_textureWidth = texWidth;
-	m_textureHeight = texHeight;
-}
+unsigned int Object::objectCount = 0;
 
