@@ -1,6 +1,7 @@
 #pragma once
 #include "loader_wavefront.hpp"
 #include "vboindexer.hpp"
+#include "SDL.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,8 +14,8 @@
 class Object
 {
 public:
-	Object(const char* texfile, float width, float height, std::vector<Object>& objects);
-	Object(const char* texfile, float width, float height, std::vector<Object>& objects, float x, float y);
+	Object(const char* texfile, float width, float height, std::vector<Object>& objects, SDL_Surface* windowSurface);
+	Object(const char* texfile, float width, float height, std::vector<Object>& objects, float x, float y, SDL_Surface* windowSurface);
 
 	void translate(float pos_x, float pos_y);
 

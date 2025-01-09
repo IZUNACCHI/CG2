@@ -36,6 +36,8 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
+	SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
+
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -56,13 +58,16 @@ int main(int argc, char** argv)
 	std::vector<unsigned int> indices;
 
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
-	Object drone("resources/graphics/graphics/drone.bmp", 32, 32, objects);
+	Object drone("resources/graphics/graphics/drone.bmp", 32, 32, objects, windowSurface);
 	objects.push_back(drone);
 
-	Object rusher("resources/graphics/graphics/rusher.bmp", 64, 32, objects, 0.5f, 0.0f);
+	Object rusher("resources/graphics/graphics/rusher.bmp", 64, 32, objects, 0.5f, 0.0f, windowSurface);
 	//Object rusher("resources/graphics/graphics/rusher.bmp", 64, 32, objects);
 	objects.push_back(rusher);
 	//rusher.m_model = glm::translate(rusher.m_model, glm::vec3(0.5f, 0.0f, 0.0f));
+
+	Object loner("resources/graphics/graphics/LonerA.bmp", 64, 64, objects, -0.5, 0.0f, windowSurface);
+	objects.push_back(loner);
 
 	size_t vbo_size = 0;
 	size_t ibo_size = 0;
@@ -142,6 +147,8 @@ int main(int argc, char** argv)
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
 	bool isRunning = true;
 
