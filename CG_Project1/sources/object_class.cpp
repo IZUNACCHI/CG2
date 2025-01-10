@@ -120,5 +120,25 @@ void Object::printVs() {
 	}
 }
 
+Animation& Object::getAnimationByName(std::string name) {
+	for (int i = 0; i < m_animations.size(); i++)
+	{
+		if (m_animations[i].m_name == name) {
+			return m_animations[i];
+		}
+	}
+}
+
+void Object::setAnimation(std::string name) {
+	auto anim = getAnimationByName(name);
+	currentAnimation = anim.m_name;
+}
+
+void Object::resetAnimation() {
+	getAnimationByName(currentAnimation).m_currentFrame = 0;
+	
+}
+
+
 unsigned int Object::objectCount = 0;
 

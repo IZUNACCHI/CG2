@@ -66,9 +66,31 @@ int main(int argc, char** argv)
 	objects.push_back(rusher);
 	//rusher.m_model = glm::translate(rusher.m_model, glm::vec3(0.5f, 0.0f, 0.0f));
 
-	Object loner("resources/graphics/graphics/LonerA.bmp", 64, 64, objects, -0.5, 0.0f, windowSurface);
+	Object loner("resources/graphics/graphics/LonerA.bmp", 64, 64, objects, -0.5f, 0.0f, windowSurface);
 	objects.push_back(loner);
+	
+	Object ship("resources/graphics/graphics/Ship1.bmp", 64, 64, objects, 0.0f, -0.5f, windowSurface);
+	Animation left("left", { 2, 1, 0}, false);
+	Animation right("right", { 4, 5, 6}, false);
+	Animation center("center", { 3 }, false);
+	ship.m_animations.reserve(ship.m_animations.size() + 3);
+	ship.m_animations.push_back(left);
+	ship.m_animations.push_back(right);
+	ship.m_animations.push_back(center);
+	left.~Animation();
+	right.~Animation();
+	center.~Animation();
+	ship.currentAnimation = "center";
+	objects.push_back(ship);
+	auto shipIndex = objects.size() - 1;
 
+	Object missile1("resources/graphics/graphics/missile.bmp", 16, 16, objects, 0.0f, -1.5f, windowSurface);
+	Animation type1("type1", { 0, 1 }, true);
+	missile1.m_animations.reserve(missile1.m_animations.size() + 1);
+	missile1.currentAnimation = "type1";
+	missile1.m_animations.push_back(type1);
+	objects.push_back(missile1);
+	
 	size_t vbo_size = 0;
 	size_t ibo_size = 0;
 
@@ -168,6 +190,35 @@ int main(int argc, char** argv)
 				isRunning = false;
 		}
 		const Uint8* keyState = SDL_GetKeyboardState(nullptr);
+		//ship
+		if (keyState[SDL_SCANCODE_A]) {
+			objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime);
+			if (objects[shipIndex].currentAnimation != "left") {
+				objects[shipIndex].resetAnimation();
+			}
+			objects[shipIndex].currentAnimation = "left";
+		}
+		else {
+			if (keyState[SDL_SCANCODE_D]) {
+				objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(1.0f, 0.0f, 0.0f) * deltaTime);
+				if (objects[shipIndex].currentAnimation != "right") {
+					objects[shipIndex].resetAnimation();
+				}
+				objects[shipIndex].currentAnimation = "right";
+			}
+			else {
+				if (objects[shipIndex].currentAnimation != "center") {
+					objects[shipIndex].resetAnimation();
+				}
+				objects[shipIndex].currentAnimation = "center";
+			}
+		}
+		if (keyState[SDL_SCANCODE_W]) {
+			objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
+		}
+		if (keyState[SDL_SCANCODE_S]) {
+			objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
+		}
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -195,18 +246,33 @@ int main(int argc, char** argv)
 			if (animUpdate)
 			{
 				frameTime = 0.0f;
-				objects[i].frameOffset_x += objects[i].frameWidth();
-
-				if (objects[i].frameOffset_x >= 1)
-				{
-					objects[i].frameOffset_x = 0.0f;
-					objects[i].frameOffset_y -= objects[i].frameHeight();
-
-					if (objects[i].frameOffset_y <= -1)
+				if (objects[i].m_animations.size() > 0) {
+					objects[i].frameOffset_x = objects[i].getAnimationByName(objects[i].currentAnimation).getFrame() * objects[i].frameWidth();
+					if (objects[i].frameOffset_x >= 1)
 					{
-						objects[i].frameOffset_y = 0.0f;
+						objects[i].frameOffset_x -= (objects[i].frameWidth() / objects[i].frameOffset_x);
+						objects[i].frameOffset_y -= objects[i].frameHeight() * (objects[i].frameWidth() / objects[i].frameOffset_x);
+
+						if (objects[i].frameOffset_y <= -1)
+						{
+							objects[i].frameOffset_y = 0.0f;
+						}
 					}
 				}
+				else {
+					objects[i].frameOffset_x += objects[i].frameWidth();
+					if (objects[i].frameOffset_x >= 1)
+					{
+						objects[i].frameOffset_x = 0.0f;
+						objects[i].frameOffset_y -= objects[i].frameHeight();
+
+						if (objects[i].frameOffset_y <= -1)
+						{
+							objects[i].frameOffset_y = 0.0f;
+						}
+					}
+				}
+
 			}
 			shaderProgram.set2Float("frameOffset", objects[i].frameOffset_x, objects[i].frameOffset_y);
 			shaderProgram.setMat4("model", objects[i].model());

@@ -2,7 +2,7 @@
 #include "loader_wavefront.hpp"
 #include "vboindexer.hpp"
 #include "SDL.h"
-
+#include "Animation.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glad/glad.h>
@@ -40,7 +40,11 @@ public:
 	glm::mat4 m_model;
 
 	static unsigned int objectCount;
-	
+	std::vector<Animation> m_animations;
+	std::string currentAnimation;
+	Animation& getAnimationByName(std::string name);
+	void setAnimation(std::string name);
+	void resetAnimation();
 	~Object() {};
 
 private:
