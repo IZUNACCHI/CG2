@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 #include <string>
+#include "Animation.h"
 
 #include <iostream>
 
@@ -25,17 +26,18 @@ public:
 
 	static unsigned int objectCount;
 
-
 	float frameOffset_x = 0;
 	float frameOffset_y = 0;
 	glm::mat4 m_model;
 
-	static unsigned int objectCount;
 	std::vector<Animation> m_animations;
 	std::string currentAnimation;
 	Animation& getAnimationByName(std::string name);
 	void setAnimation(std::string name);
 	void resetAnimation();
+
+	bool animate;
+
 	~Object() {};
 
 protected:

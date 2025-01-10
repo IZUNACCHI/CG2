@@ -79,8 +79,41 @@ Text::Text(std::vector<char>& letters, GLuint& texture, std::map<char, std::vect
 
 	glGenVertexArrays(1, &m_vao);
 
-	PopulateVertices(m_vertices, letters, mapped_chars, smalltxt ? 8 : 16);
+	PopulateVertices(m_vertices, letters, mapped_chars, m_width);
 	PopulateIndices(m_indices, letters);
 	objectCount++;
 	objects.reserve(objectCount);
+}
+
+Text::Text(std::vector<char>& letters, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects, float x, float y)
+	:m_letters{ letters }
+{
+
+	p_texture = &texture;
+	m_orderInLayer = 1;
+	if (smalltxt)
+	{
+		m_textureWidth = 64;
+		m_textureHeight = 128;
+		m_width = m_height = 8;
+		m_frameWidth = m_width / m_textureWidth;
+		m_frameHeight = m_height / m_textureHeight;
+	}
+	else
+	{
+		m_textureWidth = 128;
+		m_textureHeight = 192;
+		m_width = m_height = 16;
+		m_frameWidth = m_width / m_textureWidth;
+		m_frameHeight = m_height / m_textureHeight;
+	}
+
+	glGenVertexArrays(1, &m_vao);
+
+	PopulateVertices(m_vertices, letters, mapped_chars, m_width);
+	PopulateIndices(m_indices, letters);
+	objectCount++;
+	objects.reserve(objectCount);
+
+	m_model = glm::translate(m_model, glm::vec3(x, y, 0.0f));
 }

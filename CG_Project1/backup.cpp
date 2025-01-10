@@ -68,6 +68,7 @@ int main(int argc, char** argv)
 	LoadTexture(tex_Text_Big, "resources/graphics/graphics/font16x16.bmp", windowSurface);
 	GLuint tex_Text_Small;
 	LoadTexture(tex_Text_Small, "resources/graphics/graphics/Font8x8.bmp", windowSurface);
+
 	std::map<char, std::vector<float>> small_chars_map;
 	std::map<char, std::vector<float>> big_chars_map;
 	MapChars(small_chars_map, big_chars_map);
@@ -88,6 +89,10 @@ int main(int argc, char** argv)
 	LoadTexture(tex_Loner, "resources/graphics/graphics/LonerA.bmp", windowSurface);
 	GLuint tex_Background;
 	LoadTexture(tex_Background, "resources/graphics/graphics/galaxy2.bmp", windowSurface);
+	GLuint tex_Ship;
+	LoadTexture(tex_Ship, "resources/graphics/graphics/Ship1.bmp", windowSurface);
+	GLuint tex_missile_1;
+	LoadTexture(tex_missile_1, "resources/graphics/graphics/missile.bmp", windowSurface);
 
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
@@ -98,8 +103,12 @@ int main(int argc, char** argv)
 
 	Actor loner(tex_Loner, 256, 256, 64, 64, 2, objects, -0.5, 0.0f, true);
 	objects.push_back(loner);
+
+	Actor background(tex_Background, 640, 480, 640, 480, 0, objects, false);
+	objects.push_back(background);
+
 	
-	Object ship("resources/graphics/graphics/Ship1.bmp", 64, 64, objects, 0.0f, -0.5f, windowSurface);
+	Actor ship(tex_Ship, 448, 64, 64, 64, 3, objects, 0.0f, -0.5f, true);
 	Animation left("left", { 2, 1, 0}, false);
 	Animation right("right", { 4, 5, 6}, false);
 	Animation center("center", { 3 }, false);
@@ -114,7 +123,7 @@ int main(int argc, char** argv)
 	objects.push_back(ship);
 	auto shipIndex = objects.size() - 1;
 
-	Object missile1("resources/graphics/graphics/missile.bmp", 16, 16, objects, 0.0f, -1.5f, windowSurface);
+	Actor missile1(tex_missile_1, 32, 48, 16, 16, 2, objects, 0.0f, -1.5f, true);
 	Animation type1("type1", { 0, 1 }, true);
 	missile1.m_animations.reserve(missile1.m_animations.size() + 1);
 	missile1.currentAnimation = "type1";
@@ -286,29 +295,29 @@ int main(int argc, char** argv)
 			if (animUpdate && it->second.animate)
 			{
 				frameTime = 0.0f;
-				if (objects[i].m_animations.size() > 0) {
-					objects[i].frameOffset_x = objects[i].getAnimationByName(objects[i].currentAnimation).getFrame() * objects[i].frameWidth();
-					if (objects[i].frameOffset_x >= 1)
+				if (it->second.m_animations.size() > 0) {
+					it->second.frameOffset_x = it->second.getAnimationByName(it->second.currentAnimation).getFrame() * it->second.frameWidth();
+					if (it->second.frameOffset_x >= 1)
 					{
-						objects[i].frameOffset_x -= (objects[i].frameWidth() / objects[i].frameOffset_x);
-						objects[i].frameOffset_y -= objects[i].frameHeight() * (objects[i].frameWidth() / objects[i].frameOffset_x);
+						it->second.frameOffset_x -= (it->second.frameWidth() / it->second.frameOffset_x);
+						it->second.frameOffset_y -= it->second.frameHeight() * (it->second.frameWidth() / it->second.frameOffset_x);
 
-						if (objects[i].frameOffset_y <= -1)
+						if (it->second.frameOffset_y <= -1)
 						{
-							objects[i].frameOffset_y = 0.0f;
+							it->second.frameOffset_y = 0.0f;
 						}
 					}
 				}
 				else {
-					objects[i].frameOffset_x += objects[i].frameWidth();
-					if (objects[i].frameOffset_x >= 1)
+					it->second.frameOffset_x += it->second.frameWidth();
+					if (it->second.frameOffset_x >= 1)
 					{
-						objects[i].frameOffset_x = 0.0f;
-						objects[i].frameOffset_y -= objects[i].frameHeight();
+						it->second.frameOffset_x = 0.0f;
+						it->second.frameOffset_y -= it->second.frameHeight();
 
-						if (objects[i].frameOffset_y <= -1)
+						if (it->second.frameOffset_y <= -1)
 						{
-							objects[i].frameOffset_y = 0.0f;
+							it->second.frameOffset_y = 0.0f;
 						}
 					}
 				}
