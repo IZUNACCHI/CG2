@@ -2,7 +2,7 @@
 
 Object::Object()
 	:m_model{(1.0f)}, p_texture{}, m_textureWidth{}, m_textureHeight{}, m_width{}, m_height{},
-	m_orderInLayer{}, m_indices{}, animate{ false }, m_vao{}, m_frameHeight{}, m_frameWidth{}
+	m_orderInLayer{}, m_indices{}, animate{ false }, m_vao{}, m_frameHeight{}, m_frameWidth{}, currentAnimation{}, m_animations{}
 {}
 
 glm::mat4 Object::model()
@@ -70,7 +70,7 @@ void Object::setAnimation(std::string name) {
 }
 
 void Object::resetAnimation() {
-	getAnimationByName(currentAnimation).m_currentFrame = 0;
+ 	getAnimationByName(currentAnimation).m_currentFrame = 0;
 
 }
 

@@ -13,7 +13,7 @@ Animation::Animation(const std::string name, std::vector<int> frameIndxs, bool l
 int Animation::getFrame() {
 	auto frame = m_currentFrame;
 	if (m_currentFrame < m_frameIndexes.size() - 1) {
-		m_currentFrame = m_currentFrame + 1;
+		m_currentFrame ++;
 	}
 	else {
 		if (m_loop) {

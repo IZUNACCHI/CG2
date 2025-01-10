@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 
-	SDL_SetRelativeMouseMode(SDL_TRUE);
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
 	{
@@ -87,28 +87,65 @@ int main(int argc, char** argv)
 	LoadTexture(tex_Rusher, "resources/graphics/graphics/rusher.bmp", windowSurface);
 	GLuint tex_Loner;
 	LoadTexture(tex_Loner, "resources/graphics/graphics/LonerA.bmp", windowSurface);
+
 	GLuint tex_Background;
 	LoadTexture(tex_Background, "resources/graphics/graphics/galaxy2.bmp", windowSurface);
+
 	GLuint tex_Ship;
 	LoadTexture(tex_Ship, "resources/graphics/graphics/Ship1.bmp", windowSurface);
 	GLuint tex_missile_1;
 	LoadTexture(tex_missile_1, "resources/graphics/graphics/missile.bmp", windowSurface);
 
+	GLuint tex_ui_life;
+	LoadTexture(tex_ui_life, "resources/graphics/graphics/PULife.bmp", windowSurface);
+
+	GLuint tex_PU_shield;
+	LoadTexture(tex_PU_shield, "resources/graphics/graphics/PUShield.bmp", windowSurface);
+	GLuint tex_PU_weapon;
+	LoadTexture(tex_PU_weapon, "resources/graphics/graphics/PUWeapon.bmp", windowSurface);
+
+	GLuint tex_aster_metal_1;
+	LoadTexture(tex_aster_metal_1, "resources/graphics/graphics/MAster96.bmp", windowSurface);
+	GLuint tex_aster_metal_2;
+	LoadTexture(tex_aster_metal_2, "resources/graphics/graphics/MAster64.bmp", windowSurface);
+	GLuint tex_aster_metal_3;
+	LoadTexture(tex_aster_metal_3, "resources/graphics/graphics/MAster32.bmp", windowSurface);
+
+
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
 	objects.push_back(drone);
 
+	Actor loner(tex_Loner, 256, 256, 64, 64, 2, objects, -0.5, 0.0f, true);
+	objects.push_back(loner);
+
 	Actor rusher(tex_Rusher, 256, 192, 64, 32, 2, objects, 0.5f, 0.0f, true);
 	objects.push_back(rusher);
 
-	Actor loner(tex_Loner, 256, 256, 64, 64, 2, objects, -0.5, 0.0f, true);
-	objects.push_back(loner);
+	//Actor rusher1(tex_Text_Small, 64, 128, 16, 16, 4, objects, 0.0f, 0.5f, false);
+	//objects.push_back(rusher1);
 
 	Actor background(tex_Background, 640, 480, 640, 480, 0, objects, false);
 	objects.push_back(background);
 
+	Actor ui_life(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.9f, -0.5f, false);
+	objects.push_back(ui_life);
+	Actor ui_life1(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.79f, -0.5f, false);
+	objects.push_back(ui_life1);
+
+	Actor pu_shield(tex_PU_shield, 128, 64, 32, 32, 1, objects, 0.4f, 0.3f, true);
+	objects.push_back(pu_shield);
+	Actor pu_weapon(tex_PU_weapon, 128, 64, 32, 32, 1, objects, -0.4f, 0.45f, true);
+	objects.push_back(pu_weapon);
+
+	Actor aster_metal_big(tex_aster_metal_1, 480, 480, 96, 96, 1, objects, 0.8f, 0.3f, true);
+	objects.push_back(aster_metal_big);
+	Actor aster_metal_med(tex_aster_metal_2, 512, 192, 64, 64, 1.1, objects, 0.6f, 0.2f, true);
+	objects.push_back(aster_metal_med);
+	Actor aster_metal_small(tex_aster_metal_3, 256, 64, 32, 32, 1.2, objects, 0.6f, -0.4f, true);
+	objects.push_back(aster_metal_small);
 	
-	Actor ship(tex_Ship, 448, 64, 64, 64, 3, objects, 0.0f, -0.5f, true);
+	Actor ship(tex_Ship, 448, 64, 64, 64, 3, objects, 0.0f, -0.5f, true, "ship");
 	Animation left("left", { 2, 1, 0}, false);
 	Animation right("right", { 4, 5, 6}, false);
 	Animation center("center", { 3 }, false);
@@ -122,12 +159,33 @@ int main(int argc, char** argv)
 	ship.currentAnimation = "center";
 	objects.push_back(ship);
 
-	Actor missile1(tex_missile_1, 32, 48, 16, 16, 2, objects, 0.0f, -1.5f, true);
+	Actor missile1(tex_missile_1, 32, 48, 16, 16, 2, objects, 0.0f, -1.5f, true, "miss");
 	Animation type1("type1", { 0, 1 }, true);
-	missile1.m_animations.reserve(missile1.m_animations.size() + 1);
+	Animation type2("type2", { 2, 3 }, true);
+	Animation type3("type3", { 4, 5 }, true);
+	missile1.m_animations.reserve(missile1.m_animations.size() + 3);
 	missile1.currentAnimation = "type1";
 	missile1.m_animations.push_back(type1);
+	missile1.m_animations.push_back(type2);
+	missile1.m_animations.push_back(type3);
 	objects.push_back(missile1);
+
+	std::vector<char> hs{ 'H', 'i', ' ', 'S', 'c', 'o', 'r', 'e' };
+	Text txt_hi_score(hs, tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
+	objects.push_back(txt_hi_score);
+
+	std::vector<char> hs1{ '0', '0', '0', '7', '4', '9', '7', '5', '0', '0'};
+	Text txt_hi_score1(hs1, tex_Text_Small, small_chars_map, true, objects, -0.125f, 0.64f);
+	objects.push_back(txt_hi_score1);
+
+	std::vector<char> p1{'P', 'l', 'a', 'y', 'e', 'r', ' ', 'O', 'n', 'e'};
+	Text txt_player_one(p1, tex_Text_Small, small_chars_map, true, objects, -0.95f, 0.68f);
+	objects.push_back(txt_player_one);
+
+	std::vector<char> s{ '0', '0', '0', '3', '8', '5', '5', '0', '5', '5' };
+	Text txt_score(s, tex_Text_Big, big_chars_map, false, objects, -0.95f, 0.6f);
+	objects.push_back(txt_score);
+
 	
 	size_t vbo_size = 0;
 	size_t ibo_size = 0;
@@ -225,12 +283,17 @@ int main(int argc, char** argv)
 
 	std::map<float, Object> sortedObjects = SortObjects(objects);
 	float shipIndex = 0;
+	float missIndex = 0;
 	for (std::map<float, Object>::iterator it = sortedObjects.begin(); it != sortedObjects.end(); it++)
 	{
 		
-		if (it->second.m_animations.size() == 3) {
+		if (it->second.m_name == "ship") {
 			shipIndex = it->first;
-			break;
+			
+		}
+		else if (it->second.m_name == "miss") {
+			missIndex = it->first;
+			
 		}
 	}
 
@@ -276,6 +339,24 @@ int main(int argc, char** argv)
 		if (keyState[SDL_SCANCODE_S]) {
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
 		}
+		if (keyState[SDL_SCANCODE_SPACE]) {
+			sortedObjects[missIndex].m_model = sortedObjects[shipIndex].m_model;
+		}
+		/*if (keyState[SDL_SCANCODE_1]) {
+			sortedObjects[missIndex].resetAnimation();
+			sortedObjects[missIndex].currentAnimation = "type1";
+		}
+		else if(keyState[SDL_SCANCODE_2]) {
+			sortedObjects[missIndex].resetAnimation();
+			sortedObjects[missIndex].currentAnimation = "type2";
+		}
+		else if (keyState[SDL_SCANCODE_3]) {
+			sortedObjects[missIndex].resetAnimation();
+			sortedObjects[missIndex].currentAnimation = "type3";
+		}*/
+
+		//missile
+		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderProgram.use();

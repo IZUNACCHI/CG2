@@ -29,6 +29,7 @@ public:
 	float frameOffset_x = 0;
 	float frameOffset_y = 0;
 	glm::mat4 m_model;
+	std::string m_name;
 
 	std::vector<Animation> m_animations;
 	std::string currentAnimation;
@@ -36,7 +37,7 @@ public:
 	void setAnimation(std::string name);
 	void resetAnimation();
 
-	bool animate;
+	bool animate = false;
 
 	~Object() {};
 
@@ -46,7 +47,7 @@ protected:
 
 	float m_width;
 	float m_height;
-
+	
 	int m_textureWidth;
 	int m_textureHeight;
 	float m_frameWidth;
