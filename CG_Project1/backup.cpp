@@ -121,7 +121,6 @@ int main(int argc, char** argv)
 	center.~Animation();
 	ship.currentAnimation = "center";
 	objects.push_back(ship);
-	auto shipIndex = objects.size() - 1;
 
 	Actor missile1(tex_missile_1, 32, 48, 16, 16, 2, objects, 0.0f, -1.5f, true);
 	Animation type1("type1", { 0, 1 }, true);
@@ -225,6 +224,15 @@ int main(int argc, char** argv)
 	bool animUpdate = false;
 
 	std::map<float, Object> sortedObjects = SortObjects(objects);
+	float shipIndex = 0;
+	for (std::map<float, Object>::iterator it = sortedObjects.begin(); it != sortedObjects.end(); it++)
+	{
+		
+		if (it->second.m_animations.size() == 3) {
+			shipIndex = it->first;
+			break;
+		}
+	}
 
 	while (isRunning) // render loop
 	{
@@ -240,36 +248,36 @@ int main(int argc, char** argv)
 		const Uint8* keyState = SDL_GetKeyboardState(nullptr);
 		//ship
 		if (keyState[SDL_SCANCODE_A]) {
-			objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime);
-			if (objects[shipIndex].currentAnimation != "left") {
-				objects[shipIndex].resetAnimation();
+			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime);
+			if (sortedObjects[shipIndex].currentAnimation != "left") {
+				sortedObjects[shipIndex].resetAnimation();
 			}
-			objects[shipIndex].currentAnimation = "left";
+			sortedObjects[shipIndex].currentAnimation = "left";
 		}
 		else {
 			if (keyState[SDL_SCANCODE_D]) {
-				objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(1.0f, 0.0f, 0.0f) * deltaTime);
-				if (objects[shipIndex].currentAnimation != "right") {
-					objects[shipIndex].resetAnimation();
+				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(1.0f, 0.0f, 0.0f) * deltaTime);
+				if (sortedObjects[shipIndex].currentAnimation != "right") {
+					sortedObjects[shipIndex].resetAnimation();
 				}
-				objects[shipIndex].currentAnimation = "right";
+				sortedObjects[shipIndex].currentAnimation = "right";
 			}
 			else {
-				if (objects[shipIndex].currentAnimation != "center") {
-					objects[shipIndex].resetAnimation();
+				if (sortedObjects[shipIndex].currentAnimation != "center") {
+					sortedObjects[shipIndex].resetAnimation();
 				}
-				objects[shipIndex].currentAnimation = "center";
+				sortedObjects[shipIndex].currentAnimation = "center";
 			}
 		}
 		if (keyState[SDL_SCANCODE_W]) {
-			objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
+			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
+			
 		}
 		if (keyState[SDL_SCANCODE_S]) {
-			objects[shipIndex].m_model = glm::translate(objects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
+			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		shaderProgram.use();
 
 		shaderProgram.setMat4("view", view);
