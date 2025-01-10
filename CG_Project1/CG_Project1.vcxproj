@@ -138,17 +138,22 @@
     <ClCompile Include="sources\camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="sources\loader_wavefront.cpp" />
-    <ClCompile Include="sources\object_class.cpp" />
+    <ClCompile Include="sources\actor_class.cpp" />
+    <ClCompile Include="sources\object.cpp" />
     <ClCompile Include="sources\shader.cpp" />
     <ClCompile Include="sources\stbImage.cpp" />
+    <ClCompile Include="sources\text_class.cpp" />
     <ClCompile Include="sources\vboindexer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\camera.h" />
-    <ClInclude Include="headers\object_class.hpp" />
+    <ClInclude Include="headers\actor_class.hpp" />
+    <ClInclude Include="headers\object.h" />
     <ClInclude Include="headers\shader.h" />
     <ClInclude Include="headers\stb_image.h" />
     <ClInclude Include="headers\loader_texture.hpp" />
+    <ClInclude Include="headers\text_class.h" />
+    <ClInclude Include="headers\Utilities.h" />
     <ClInclude Include="headers\vboindexer.hpp" />
     <ClInclude Include="headers\loader_wavefront.hpp" />
   </ItemGroup>

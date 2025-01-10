@@ -15,34 +15,36 @@ enum CameraMovement {
 class Camera
 {
 public:
-	Camera(glm::vec3 cameraPosition, glm::vec3 up, float yaw, float pitch);
+	//Camera(glm::vec3 cameraPosition, glm::vec3 up, float yaw, float pitch, glm::vec3 cameraTarget);
+	Camera(glm::vec3 cameraPosition, glm::vec3 up, glm::vec3 cameraTarget);
 
 	glm::mat4 getViewMatrix() const;
 
-	void processKeyboardInput(const Uint8* keyState, float deltaTime);
-	void processMouseInput(SDL_Event ev, float deltaTime);
-	void processMouseScroll(float yoffset);
-	float getFov() const { return fov; };
+	//void processKeyboardInput(const Uint8* keyState, float deltaTime);
+	//void processMouseInput(SDL_Event ev, float deltaTime);
+	//void processMouseScroll(float yoffset);
+	//float getFov() const { return fov; };
 	inline glm::vec3 GetPosition() { return position; };
 
 private:
-	void updateCameraVectors();
-	void move(CameraMovement direction, float velocity);
+	//void updateCameraVectors();
+	//void move(CameraMovement direction, float velocity);
 
 private:
 	glm::vec3 position;
-	glm::vec3 front;
-	glm::vec3 up;
-	glm::vec3 right;
+	//glm::vec3 front;
+	//glm::vec3 up;
+	//glm::vec3 right;
 	glm::vec3 worldUp;
-	glm::vec3 hfront;
+	//glm::vec3 hfront;
+	glm::vec3 target;
 
-	float yaw;
-	float pitch;
-	float movementSpeed;
-	float mouseSensitivity;
-	float fov;
+	//float yaw;
+	//float pitch;
+	//float movementSpeed;
+	//float mouseSensitivity;
+	//float fov;
 
-	float lastX, lastY;
-	bool firstMouse;
+	//float lastX, lastY;
+	//bool firstMouse;
 };
