@@ -111,6 +111,12 @@ int main(int argc, char** argv)
 	GLuint tex_aster_metal_3;
 	LoadTexture(tex_aster_metal_3, "resources/graphics/graphics/MAster32.bmp", windowSurface);
 
+	GLuint tex_big_stone;
+	LoadTexture(tex_big_stone, "resources/graphics/graphics/SAster96.bmp", windowSurface);
+	GLuint tex_med_stone;
+	LoadTexture(tex_med_stone, "resources/graphics/graphics/SAster64.bmp", windowSurface);
+	GLuint tex_s_stone;
+	LoadTexture(tex_s_stone, "resources/graphics/graphics/SAster32.bmp", windowSurface);
 
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
@@ -169,6 +175,13 @@ int main(int argc, char** argv)
 	missile1.m_animations.push_back(type2);
 	missile1.m_animations.push_back(type3);
 	objects.push_back(missile1);
+
+	Actor bigStone(tex_big_stone, 480, 480, 96, 96, 2, objects, 0.1f, 0.6f, true, "bigS");
+	objects.push_back(bigStone);
+	Actor medStone(tex_med_stone, 512, 192, 64, 64, 2.1, objects, 0.0f, 1.8f, true, "medS");
+	objects.push_back(medStone);
+	Actor sStone(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS");
+	objects.push_back(sStone);
 
 	std::vector<char> hs{ 'H', 'i', ' ', 'S', 'c', 'o', 'r', 'e' };
 	Text txt_hi_score(hs, tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
@@ -284,6 +297,10 @@ int main(int argc, char** argv)
 	std::map<float, Object> sortedObjects = SortObjects(objects);
 	float shipIndex = 0;
 	float missIndex = 0;
+	float bigSIndex = 0;
+	float medSIndex = 0;
+	float sSIndex = 0;
+	int stageS = 0;
 	for (std::map<float, Object>::iterator it = sortedObjects.begin(); it != sortedObjects.end(); it++)
 	{
 		
@@ -293,7 +310,18 @@ int main(int argc, char** argv)
 		}
 		else if (it->second.m_name == "miss") {
 			missIndex = it->first;
-			
+		}
+		else if (it->second.m_name == "bigS") {
+			bigSIndex = it->first;
+
+		}
+		else if (it->second.m_name == "medS") {
+			medSIndex = it->first;
+
+		}
+		else if (it->second.m_name == "sS") {
+			sSIndex = it->first;
+
 		}
 	}
 
@@ -354,6 +382,26 @@ int main(int argc, char** argv)
 			sortedObjects[missIndex].resetAnimation();
 			sortedObjects[missIndex].currentAnimation = "type3";
 		}*/
+		if (keyState[SDL_SCANCODE_B] && frameTime >= 0.09f) {
+			switch (stageS) {
+			case 0:
+				sortedObjects[medSIndex].m_model = sortedObjects[bigSIndex].m_model;
+				sortedObjects[bigSIndex].m_model = glm::translate(sortedObjects[bigSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+				stageS++;
+				break;
+			case 1:
+				sortedObjects[sSIndex].m_model = sortedObjects[medSIndex].m_model;
+				sortedObjects[medSIndex].m_model = glm::translate(sortedObjects[medSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+				stageS++;
+				break;
+			case 2:
+				sortedObjects[bigSIndex].m_model = sortedObjects[sSIndex].m_model;
+				sortedObjects[sSIndex].m_model = glm::translate(sortedObjects[sSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+				stageS = 0;
+				break;
+			}
+			
+		}
 
 		//missile
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
@@ -398,6 +446,7 @@ int main(int argc, char** argv)
 					}
 				}
 				else {
+					frameTime = 0.0f;
 					it->second.frameOffset_x += it->second.frameWidth();
 					if (it->second.frameOffset_x >= 1)
 					{
