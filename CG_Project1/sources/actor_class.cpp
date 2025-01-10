@@ -27,9 +27,11 @@ void Translate(glm::mat4& model, glm::vec3 transPos)
 }
 
 Actor::Actor()
+	:m_id{}
 {}
 
 Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float height, float layer, std::vector<Object>& objects, bool banimate)
+	:m_id{ objectCount }
 {
 	p_texture = &texture;
 	m_textureWidth = tex_width;
@@ -52,6 +54,7 @@ Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float 
 }
 
 Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float height, float layer, std::vector<Object>& objects, float x, float y, bool banimate)
+	:m_id{ objectCount }
 {
 	p_texture = &texture;
 	m_textureWidth = tex_width;
@@ -168,6 +171,11 @@ void Actor::printVs() {
 	{
 		std::cout << m_vertices[i] << std::endl;
 	}
+}
+
+unsigned int Actor::id()
+{
+	return m_id;
 }
 
 //unsigned int Actor::objectCount = 0;

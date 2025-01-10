@@ -36,7 +36,8 @@ public:
 	//float frameHeight();
 
 	//static unsigned int objectCount;
-
+	
+	unsigned int id();
 
 	//float frameOffset_x = 0;
 	//float frameOffset_y = 0;
@@ -51,6 +52,7 @@ private:
 
 	//float m_width;
 	//float m_height;
+	unsigned int m_id;
 
 	//int m_textureWidth;
 	//int m_textureHeight;

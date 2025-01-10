@@ -36,7 +36,7 @@ public:
 	void setAnimation(std::string name);
 	void resetAnimation();
 
-	bool animate;
+	bool animate = false;
 
 	~Object() {};
 
