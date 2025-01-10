@@ -2,6 +2,9 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
+#include <string>
+
+#include <iostream>
 
 class Object
 {
@@ -26,7 +29,14 @@ public:
 	float frameOffset_x = 0;
 	float frameOffset_y = 0;
 	glm::mat4 m_model;
-	bool animate;
+
+	static unsigned int objectCount;
+	std::vector<Animation> m_animations;
+	std::string currentAnimation;
+	Animation& getAnimationByName(std::string name);
+	void setAnimation(std::string name);
+	void resetAnimation();
+	~Object() {};
 
 protected:
 	std::vector<float> m_vertices;
