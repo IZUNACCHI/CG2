@@ -17,7 +17,7 @@ int Animation::getFrame() {
 	}
 	else {
 		if (m_loop) {
-			m_currentFrame = m_frameIndexes[0];
+			m_currentFrame = 0;
 		}
 	}
 	//std::cout << m_frameIndexes[frame] << std::endl;
