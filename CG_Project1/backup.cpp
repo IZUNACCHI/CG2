@@ -118,6 +118,9 @@ int main(int argc, char** argv)
 	GLuint tex_s_stone;
 	LoadTexture(tex_s_stone, "resources/graphics/graphics/SAster32.bmp");
 
+	GLuint tex_explosion;
+	LoadTexture(tex_s_stone, "resources/graphics/graphics/explode16.bmp", windowSurface);
+
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
 	objects.push_back(drone);
@@ -183,7 +186,11 @@ int main(int argc, char** argv)
 	Actor sStone(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS");
 	objects.push_back(sStone);
 
-	Text txt_hi_score("Hi Score", tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
+	Actor explosion(tex_explosion, 80, 32, 16, 16, 4, objects, 0.0f, 1.8f, false, "explosion");
+	objects.push_back(explosion);
+
+	std::vector<char> hs{ 'H', 'i', ' ', 'S', 'c', 'o', 'r', 'e' };
+	Text txt_hi_score(hs, tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
 	objects.push_back(txt_hi_score);
 
 	std::string highScore_text{ "0007497500" };
@@ -299,7 +306,9 @@ int main(int argc, char** argv)
 	float bigSIndex = 0;
 	float medSIndex = 0;
 	float sSIndex = 0;
+	float explosionIndex = 0;
 	int stageS = 0;
+
 	for (std::map<float, Object>::iterator it = sortedObjects.begin(); it != sortedObjects.end(); it++)
 	{
 		
@@ -320,6 +329,10 @@ int main(int argc, char** argv)
 		}
 		else if (it->second.m_name == "sS") {
 			sSIndex = it->first;
+
+		}
+		else if (it->second.m_name == "explosion") {
+			explosionIndex = it->first;
 
 		}
 	}
@@ -367,6 +380,7 @@ int main(int argc, char** argv)
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
 		}
 		if (keyState[SDL_SCANCODE_SPACE]) {
+			sortedObjects[explosionIndex].m_model = sortedObjects[missIndex].m_model;
 			sortedObjects[missIndex].m_model = sortedObjects[shipIndex].m_model;
 		}
 		if (keyState[SDL_SCANCODE_1]) {
