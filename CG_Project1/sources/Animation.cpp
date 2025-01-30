@@ -20,7 +20,7 @@ int Animation::getFrame() {
 			m_currentFrame = 0;
 		}
 	}
-	//std::cout << m_frameIndexes[frame] << std::endl;
+
 	return m_frameIndexes[frame];
 }
 
