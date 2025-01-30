@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 	LoadTexture(tex_s_stone, "resources/graphics/graphics/SAster32.bmp");
 
 	GLuint tex_explosion;
-	LoadTexture(tex_s_stone, "resources/graphics/graphics/explode16.bmp", windowSurface);
+	LoadTexture(tex_s_stone, "resources/graphics/graphics/explode16.bmp");
 
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
@@ -189,8 +189,7 @@ int main(int argc, char** argv)
 	Actor explosion(tex_explosion, 80, 32, 16, 16, 4, objects, 0.0f, 1.8f, false, "explosion");
 	objects.push_back(explosion);
 
-	std::vector<char> hs{ 'H', 'i', ' ', 'S', 'c', 'o', 'r', 'e' };
-	Text txt_hi_score(hs, tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
+	Text txt_hi_score("Hi Score", tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
 	objects.push_back(txt_hi_score);
 
 	std::string highScore_text{ "0007497500" };
