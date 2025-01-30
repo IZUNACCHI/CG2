@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
+	//SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
 
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 
@@ -65,13 +65,13 @@ int main(int argc, char** argv)
 
 	// Load all textures first
 	GLuint tex_Text_Big;
-	LoadTexture(tex_Text_Big, "resources/graphics/graphics/font16x16.bmp", windowSurface);
+	LoadTexture(tex_Text_Big, "resources/graphics/graphics/font16x16.bmp");
 	GLuint tex_Text_Small;
-	LoadTexture(tex_Text_Small, "resources/graphics/graphics/Font8x8.bmp", windowSurface);
+	LoadTexture(tex_Text_Small, "resources/graphics/graphics/Font8x8.bmp");
 
 	std::map<char, std::vector<float>> small_chars_map;
 	std::map<char, std::vector<float>> big_chars_map;
-	MapChars(small_chars_map, big_chars_map);
+	MapChars(small_chars_map, 8.0f, 64.0f, 128.0f, big_chars_map, 16.0f, 128.0f, 192.0f);
 
 
 	//for (std::map<char, std::vector<float>>::iterator it = small_chars_map.begin(); it != small_chars_map.end(); it++)
@@ -82,41 +82,41 @@ int main(int argc, char** argv)
 	//};
 
 	GLuint tex_Drone;
-	LoadTexture(tex_Drone, "resources/graphics/graphics/drone.bmp", windowSurface);
+	LoadTexture(tex_Drone, "resources/graphics/graphics/drone.bmp");
 	GLuint tex_Rusher;
-	LoadTexture(tex_Rusher, "resources/graphics/graphics/rusher.bmp", windowSurface);
+	LoadTexture(tex_Rusher, "resources/graphics/graphics/rusher.bmp");
 	GLuint tex_Loner;
-	LoadTexture(tex_Loner, "resources/graphics/graphics/LonerA.bmp", windowSurface);
+	LoadTexture(tex_Loner, "resources/graphics/graphics/LonerA.bmp");
 
 	GLuint tex_Background;
-	LoadTexture(tex_Background, "resources/graphics/graphics/galaxy2.bmp", windowSurface);
+	LoadTexture(tex_Background, "resources/graphics/graphics/galaxy2.bmp");
 
 	GLuint tex_Ship;
-	LoadTexture(tex_Ship, "resources/graphics/graphics/Ship1.bmp", windowSurface);
+	LoadTexture(tex_Ship, "resources/graphics/graphics/Ship1.bmp");
 	GLuint tex_missile_1;
-	LoadTexture(tex_missile_1, "resources/graphics/graphics/missile.bmp", windowSurface);
+	LoadTexture(tex_missile_1, "resources/graphics/graphics/missile.bmp");
 
 	GLuint tex_ui_life;
-	LoadTexture(tex_ui_life, "resources/graphics/graphics/PULife.bmp", windowSurface);
+	LoadTexture(tex_ui_life, "resources/graphics/graphics/PULife.bmp");
 
 	GLuint tex_PU_shield;
-	LoadTexture(tex_PU_shield, "resources/graphics/graphics/PUShield.bmp", windowSurface);
+	LoadTexture(tex_PU_shield, "resources/graphics/graphics/PUShield.bmp");
 	GLuint tex_PU_weapon;
-	LoadTexture(tex_PU_weapon, "resources/graphics/graphics/PUWeapon.bmp", windowSurface);
+	LoadTexture(tex_PU_weapon, "resources/graphics/graphics/PUWeapon.bmp");
 
 	GLuint tex_aster_metal_1;
-	LoadTexture(tex_aster_metal_1, "resources/graphics/graphics/MAster96.bmp", windowSurface);
+	LoadTexture(tex_aster_metal_1, "resources/graphics/graphics/MAster96.bmp");
 	GLuint tex_aster_metal_2;
-	LoadTexture(tex_aster_metal_2, "resources/graphics/graphics/MAster64.bmp", windowSurface);
+	LoadTexture(tex_aster_metal_2, "resources/graphics/graphics/MAster64.bmp");
 	GLuint tex_aster_metal_3;
-	LoadTexture(tex_aster_metal_3, "resources/graphics/graphics/MAster32.bmp", windowSurface);
+	LoadTexture(tex_aster_metal_3, "resources/graphics/graphics/MAster32.bmp");
 
 	GLuint tex_big_stone;
-	LoadTexture(tex_big_stone, "resources/graphics/graphics/SAster96.bmp", windowSurface);
+	LoadTexture(tex_big_stone, "resources/graphics/graphics/SAster96.bmp");
 	GLuint tex_med_stone;
-	LoadTexture(tex_med_stone, "resources/graphics/graphics/SAster64.bmp", windowSurface);
+	LoadTexture(tex_med_stone, "resources/graphics/graphics/SAster64.bmp");
 	GLuint tex_s_stone;
-	LoadTexture(tex_s_stone, "resources/graphics/graphics/SAster32.bmp", windowSurface);
+	LoadTexture(tex_s_stone, "resources/graphics/graphics/SAster32.bmp");
 
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
@@ -183,20 +183,19 @@ int main(int argc, char** argv)
 	Actor sStone(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS");
 	objects.push_back(sStone);
 
-	std::vector<char> hs{ 'H', 'i', ' ', 'S', 'c', 'o', 'r', 'e' };
-	Text txt_hi_score(hs, tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
+	Text txt_hi_score("Hi Score", tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
 	objects.push_back(txt_hi_score);
 
-	std::vector<char> hs1{ '0', '0', '0', '7', '4', '9', '7', '5', '0', '0'};
-	Text txt_hi_score1(hs1, tex_Text_Small, small_chars_map, true, objects, -0.125f, 0.64f);
+	std::string highScore_text{ "0007497500" };
+	Text txt_hi_score1(highScore_text, tex_Text_Small, small_chars_map, true, objects, -0.125f, 0.64f);
 	objects.push_back(txt_hi_score1);
 
-	std::vector<char> p1{'P', 'l', 'a', 'y', 'e', 'r', ' ', 'O', 'n', 'e'};
-	Text txt_player_one(p1, tex_Text_Small, small_chars_map, true, objects, -0.95f, 0.68f);
+	std::string p1_text{ "Player One" };
+	Text txt_player_one(p1_text, tex_Text_Small, small_chars_map, true, objects, -0.95f, 0.68f);
 	objects.push_back(txt_player_one);
 
-	std::vector<char> s{ '0', '0', '0', '3', '8', '5', '5', '0', '5', '5' };
-	Text txt_score(s, tex_Text_Big, big_chars_map, false, objects, -0.95f, 0.6f);
+	std::string score_text { "0003855055" };
+	Text txt_score(score_text, tex_Text_Big, big_chars_map, false, objects, -0.95f, 0.6f);
 	objects.push_back(txt_score);
 
 	

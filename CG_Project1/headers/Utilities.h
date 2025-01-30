@@ -48,13 +48,13 @@ char characters[]
 	'x', 'y', 'z', '{', '|', '}', '~', '«'
 };
 
-void MapChars(std::map<char, std::vector<float>>& map_small_chars, std::map<char, std::vector<float>>& map_big_chars)
+void MapChars(std::map<char, std::vector<float>>& map_small_chars, float s_char_size, float s_tex_w, float s_tex_h, std::map<char, std::vector<float>>& map_big_chars, float b_char_size, float b_tex_w, float b_tex_h)
 {
 	static unsigned int char_no = 0;
-	float s_fWidth = 8.0f / 64.0f;
-	float s_fHeight = 8.0f / 128.0f;
-	float b_fWidth = 16.0f / 128.0f;
-	float b_fHeight = 16.0f / 192.0f;
+	float s_fWidth = s_char_size / s_tex_w;
+	float s_fHeight = s_char_size / s_tex_h;
+	float b_fWidth = b_char_size / b_tex_w;
+	float b_fHeight = b_char_size / b_tex_h;
 
 	//for each row of characters in the texture
 	for (float i = 0; i < 12; i++)

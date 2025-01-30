@@ -7,11 +7,9 @@
 class Text : public Object 
 {
 public:
-	Text(std::vector<char>& letters, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects);
-	Text(std::vector<char>& letters, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects, float x, float y);
+	Text(std::string& letters, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects, float x, float y);
+	Text(const char*, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects, float x, float y);
 	~Text() {};
 
 private:
-	std::vector<char> m_letters;
-	//std::map<char, std::vector<float>> s
 };

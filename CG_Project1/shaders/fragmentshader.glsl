@@ -8,5 +8,8 @@ uniform sampler2D Texture;
 
 void main()
 {
-	outColor = texture(Texture, TexCoord);
+	vec4 TexColor = texture(Texture, TexCoord);
+	if(TexColor.r == 1.0f && TexColor.g == 0.0f && TexColor.b == 1.0f)
+		discard;
+	outColor = TexColor;
 };
