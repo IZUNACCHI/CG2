@@ -154,7 +154,7 @@ int main(int argc, char** argv)
 	Actor ship(tex_Ship, 448, 64, 64, 64, 3, objects, 0.0f, -0.5f, true, "ship");
 	Animation left("left", { 2, 1, 0}, false);
 	Animation right("right", { 4, 5, 6}, false);
-	Animation center("center", { 3 }, false);
+	Animation center("center", { 3 }, true);
 	ship.m_animations.reserve(ship.m_animations.size() + 3);
 	ship.m_animations.push_back(left);
 	ship.m_animations.push_back(right);
@@ -324,7 +324,7 @@ int main(int argc, char** argv)
 
 		}
 	}
-
+	float mathAux;
 	while (isRunning) // render loop
 	{
 		int now = SDL_GetTicks();
@@ -370,7 +370,7 @@ int main(int argc, char** argv)
 		if (keyState[SDL_SCANCODE_SPACE]) {
 			sortedObjects[missIndex].m_model = sortedObjects[shipIndex].m_model;
 		}
-		/*if (keyState[SDL_SCANCODE_1]) {
+		if (keyState[SDL_SCANCODE_1]) {
 			sortedObjects[missIndex].resetAnimation();
 			sortedObjects[missIndex].currentAnimation = "type1";
 		}
@@ -381,7 +381,7 @@ int main(int argc, char** argv)
 		else if (keyState[SDL_SCANCODE_3]) {
 			sortedObjects[missIndex].resetAnimation();
 			sortedObjects[missIndex].currentAnimation = "type3";
-		}*/
+		}
 		if (keyState[SDL_SCANCODE_B] && frameTime >= 0.09f) {
 			switch (stageS) {
 			case 0:
@@ -436,13 +436,14 @@ int main(int argc, char** argv)
 					it->second.frameOffset_x = it->second.getAnimationByName(it->second.currentAnimation).getFrame() * it->second.frameWidth();
 					if (it->second.frameOffset_x >= 1)
 					{
-						it->second.frameOffset_x -= (it->second.frameWidth() / it->second.frameOffset_x);
-						it->second.frameOffset_y -= it->second.frameHeight() * (it->second.frameWidth() / it->second.frameOffset_x);
+						mathAux = floor(it->second.frameOffset_x); //how many rows ex: offset_x = 5.4 then off set x = 0.4 and offset y = -5 
+						it->second.frameOffset_x -= mathAux; 
+						it->second.frameOffset_y = it->second.frameHeight() * mathAux;
 
-						if (it->second.frameOffset_y <= -1)
-						{
-							it->second.frameOffset_y = 0.0f;
-						}
+						std::cout << it->second.frameOffset_x << std::endl;
+						std::cout << it->second.frameOffset_y << std::endl;
+
+						
 					}
 				}
 				else {

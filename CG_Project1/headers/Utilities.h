@@ -18,7 +18,6 @@ std::map<float, Object> SortObjects(std::vector<Object> objects)
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		float layer = objects[i].layer() * 10;
-		std::cout << "before: " << layer << std::endl;
 
 		std::map<float, Object>::iterator it = sorted.find(layer);
 
@@ -27,7 +26,6 @@ std::map<float, Object> SortObjects(std::vector<Object> objects)
 			layer += 0.01f;
 			it = sorted.find(layer);
 		}
-		std::cout << "after: " << layer << std::endl;
 		sorted[layer] = objects[i];
 	}
 
