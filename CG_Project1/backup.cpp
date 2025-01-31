@@ -185,7 +185,7 @@ int main(int argc, char** argv)
 	missile1.m_animations.push_back(type3);
 	objects.push_back(missile1);
 
-	Actor enemyProj(tex_missile_enemy, 128, 16, 16, 16, 3, objects, -0.5f, 0.0f, true, "missEnemy");
+	Actor enemyProj(tex_missile_enemy, 128, 16, 16, 16, 3, objects, -0.55f, 0.0f, true, "missEnemy");
 	objects.push_back(enemyProj);
 
 	Actor bigStone(tex_big_stone, 480, 480, 96, 96, 2, objects, 0.1f, 0.6f, true, "bigS");
@@ -422,12 +422,12 @@ int main(int argc, char** argv)
 		}
 		if (keyState[SDL_SCANCODE_W]) {
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
-			companionOffset_y = companionOffset_y + 0.1f * deltaTime;
+			companionOffset_y = companionOffset_y + 0.15f * deltaTime;
 			companionOffset_x = companionOffset_x + 0.025f * deltaTime;
 		}
 		if (keyState[SDL_SCANCODE_S]) {
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
-			companionOffset_y = companionOffset_y - 0.1f * deltaTime;
+			companionOffset_y = companionOffset_y - 0.15f * deltaTime;
 			companionOffset_x = companionOffset_x - 0.025f * deltaTime;
 		}
 		if (keyState[SDL_SCANCODE_SPACE]) {
@@ -483,8 +483,8 @@ int main(int argc, char** argv)
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
 		sortedObjects[missEnemyIndex].m_model = glm::translate(sortedObjects[missEnemyIndex].m_model, glm::vec3(0.0f, -0.35f, 0.0f) * deltaTime);
 		//reset enemy projectile
-		if (now % 5000 == 0) {
-			sortedObjects[missEnemyIndex].m_model = loner.m_model;
+		if (now % 4000 == 0) {
+			sortedObjects[missEnemyIndex].m_model = glm::translate(loner.m_model, glm::vec3(-0.05f, 0.0f, 0.0f));
 		}
 		//companion left
 		sortedObjects[compLIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.25f - companionOffset_x, 0.0f + companionOffset_y, 0.0f));
