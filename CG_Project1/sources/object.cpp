@@ -3,7 +3,9 @@
 Object::Object()
 	:m_model{(1.0f)}, p_texture{}, m_textureWidth{}, m_textureHeight{}, m_width{}, m_height{},
 	m_orderInLayer{}, m_indices{}, animate{ false }, m_vao{}, m_frameHeight{}, m_frameWidth{}, currentAnimation{}, m_animations{}
-{}
+{
+	m_enabled = true;
+}
 
 glm::mat4 Object::model()
 {
@@ -72,6 +74,20 @@ void Object::setAnimation(std::string name) {
 void Object::resetAnimation() {
  	getAnimationByName(currentAnimation).m_currentFrame = 0;
 
+}
+
+void Object::NextAnimation() {
+	resetAnimation();
+	getAnimationByName(currentAnimation).m_readyNext = false;
+	setAnimation(getAnimationByName(currentAnimation).m_nextAnim);
+}
+
+void Object::Disable() {
+	m_enabled = false;
+}
+
+void Object::Enable() {
+	m_enabled = true;
 }
 
 unsigned int Object::objectCount = 0;

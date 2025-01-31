@@ -7,7 +7,8 @@ Animation::Animation(const std::string name, std::vector<int> frameIndxs, bool l
 	m_frameIndexes = frameIndxs;
 	m_currentFrame = 0;
 	m_loop = loop;
-
+	m_nextAnim = "";
+	m_readyNext = false;
 }
 
 int Animation::getFrame() {
@@ -18,6 +19,9 @@ int Animation::getFrame() {
 	else {
 		if (m_loop) {
 			m_currentFrame = 0;
+		}
+		else {
+			m_readyNext = true;
 		}
 	}
 

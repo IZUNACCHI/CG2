@@ -189,11 +189,26 @@ int main(int argc, char** argv)
 	Actor sStone(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS");
 	objects.push_back(sStone);
 
-	/*Actor companionLeft(tex_explosion, 80, 32, 16, 16, 4, objects, 0.5f, 0.9f, true, "companionL");
+	//companion
+	Animation CompAppear("compAppear", { 16, 17, 18, 19 }, false);
+	Animation CompDisappear("compDisappear", { 19, 18, 17, 16 }, false);
+	Animation CompLoop("compLoop", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, true);
+
+	Actor companionLeft(tex_companion, 128, 160, 32, 32, 4, objects, 0.0f, 0.0f, true, "companionL");
+	companionLeft.m_animations.push_back(CompAppear);
+	companionLeft.m_animations.push_back(CompDisappear);
+	companionLeft.m_animations.push_back(CompLoop);
+	companionLeft.currentAnimation = "compLoop";
+	//companionLeft.Disable();
 	objects.push_back(companionLeft);
 
-	Actor companionRight(tex_companion, 80, 32, 16, 16, 4, objects, 0.0f, 0.9f, true, "companionR");
-	objects.push_back(companionRight);*/
+	Actor companionRight(tex_companion, 128, 160, 32, 32, 4, objects, 0.0f, 0.0f, true, "companionR");
+	companionRight.m_animations.push_back(CompAppear);
+	companionRight.m_animations.push_back(CompDisappear);
+	companionRight.m_animations.push_back(CompLoop);
+	companionRight.currentAnimation = "compLoop";
+	//companionRight.Disable();
+	objects.push_back(companionRight);
 
 	Actor explosion(tex_explosion, 80, 32, 16, 16, 4, objects, 0.5f, 0.5f, true, "explosion");
 	Animation expAnim("expAnim", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, false);
@@ -357,6 +372,9 @@ int main(int argc, char** argv)
 		}
 	}
 	float rows;
+	float companionOffset_x = 0;
+	float companionOffset_y = -0.08f;
+
 	while (isRunning) // render loop
 	{
 		int now = SDL_GetTicks();
@@ -394,10 +412,13 @@ int main(int argc, char** argv)
 		}
 		if (keyState[SDL_SCANCODE_W]) {
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
-			
+			companionOffset_y = companionOffset_y + 0.1f * deltaTime;
+			companionOffset_x = companionOffset_x + 0.025f * deltaTime;
 		}
 		if (keyState[SDL_SCANCODE_S]) {
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
+			companionOffset_y = companionOffset_y - 0.1f * deltaTime;
+			companionOffset_x = companionOffset_x - 0.025f * deltaTime;
 		}
 		if (keyState[SDL_SCANCODE_SPACE]) {
 			if (doOnceSpace) {
@@ -448,9 +469,13 @@ int main(int argc, char** argv)
 			doOnceB = true;
 		}
 
-		//missile
+		//missile move with time
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
-
+		//companion left
+		sortedObjects[compLIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.25f - companionOffset_x, 0.0f + companionOffset_y, 0.0f));
+		//companion right
+		sortedObjects[compRIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(-0.25f + companionOffset_x, 0.0f + companionOffset_y, 0.0f));
+		//Cpman
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderProgram.use();
 
@@ -484,7 +509,14 @@ int main(int argc, char** argv)
 					{
 						rows = floor(it->second.frameOffset_x); //how many rows ex: offset_x = 5.4 then off set x = 0.4 and offset y = -5 
 						it->second.frameOffset_x -= rows; 
-						it->second.frameOffset_y = it->second.frameHeight() * rows;
+						it->second.frameOffset_y = it->second.frameHeight() * -rows;
+
+						if (it->first == compLIndex) {
+							std::cout << "x" << std::endl;
+							std::cout << it->second.frameOffset_x << std::endl;
+							std::cout << "y" << std::endl;
+							std::cout << it->second.frameOffset_y << std::endl;
+						}
 					}
 				}
 				else {
