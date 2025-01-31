@@ -90,6 +90,8 @@ int main(int argc, char** argv)
 
 	GLuint tex_Background;
 	LoadTexture(tex_Background, "resources/graphics/graphics/galaxy2.bmp");
+	GLuint tex_paralax;
+	LoadTexture(tex_paralax, "resources/graphics/graphics/Blocks.bmp");
 
 	GLuint tex_Ship;
 	LoadTexture(tex_Ship, "resources/graphics/graphics/Ship1.bmp");
@@ -131,11 +133,10 @@ int main(int argc, char** argv)
 	Actor rusher(tex_Rusher, 256, 192, 64, 32, 2, objects, 0.5f, 0.0f, true);
 	objects.push_back(rusher);
 
-	//Actor rusher1(tex_Text_Small, 64, 128, 16, 16, 4, objects, 0.0f, 0.5f, false);
-	//objects.push_back(rusher1);
-
 	Actor background(tex_Background, 640, 480, 640, 480, 0, objects, false);
 	objects.push_back(background);
+	Actor parallax(tex_paralax, 512, 2048, 32, 11, 2, 304, 1, objects, 0.1f, 0.2f, false);
+	objects.push_back(parallax);
 
 	Actor ui_life(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.9f, -0.5f, false);
 	objects.push_back(ui_life);
@@ -162,9 +163,6 @@ int main(int argc, char** argv)
 	ship.m_animations.push_back(left);
 	ship.m_animations.push_back(right);
 	ship.m_animations.push_back(center);
-	left.~Animation();
-	right.~Animation();
-	center.~Animation();
 	ship.currentAnimation = "center";
 	objects.push_back(ship);
 
