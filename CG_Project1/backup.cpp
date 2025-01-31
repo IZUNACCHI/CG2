@@ -98,6 +98,9 @@ int main(int argc, char** argv)
 	GLuint tex_missile_1;
 	LoadTexture(tex_missile_1, "resources/graphics/graphics/missile.bmp");
 
+	GLuint tex_missile_enemy;
+	LoadTexture(tex_missile_enemy, "resources/graphics/graphics/EnWeap6.bmp");
+
 	GLuint tex_ui_life;
 	LoadTexture(tex_ui_life, "resources/graphics/graphics/PULife.bmp");
 
@@ -121,7 +124,10 @@ int main(int argc, char** argv)
 	LoadTexture(tex_s_stone, "resources/graphics/graphics/SAster32.bmp");
 
 	GLuint tex_explosion;
-	LoadTexture(tex_s_stone, "resources/graphics/graphics/explode16.bmp");
+	LoadTexture(tex_explosion, "resources/graphics/graphics/explode16.bmp");
+
+	GLuint tex_companion;
+	LoadTexture(tex_companion, "resources/graphics/graphics/clone.bmp");
 
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
@@ -177,6 +183,9 @@ int main(int argc, char** argv)
 	missile1.m_animations.push_back(type3);
 	objects.push_back(missile1);
 
+	Actor enemyProj(tex_missile_enemy, 128, 16, 16, 16, 3, objects, -0.55f, 0.0f, true, "missEnemy");
+	objects.push_back(enemyProj);
+
 	Actor bigStone(tex_big_stone, 480, 480, 96, 96, 2, objects, 0.1f, 0.6f, true, "bigS");
 	objects.push_back(bigStone);
 	Actor medStone(tex_med_stone, 512, 192, 64, 64, 2.1, objects, 0.0f, 1.8f, true, "medS");
@@ -184,7 +193,31 @@ int main(int argc, char** argv)
 	Actor sStone(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS");
 	objects.push_back(sStone);
 
-	Actor explosion(tex_explosion, 80, 32, 16, 16, 4, objects, 0.0f, 1.8f, false, "explosion");
+	//companion
+	Animation CompAppear("compAppear", { 16, 17, 18, 19 }, false);
+	Animation CompDisappear("compDisappear", { 19, 18, 17, 16 }, false);
+	Animation CompLoop("compLoop", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, true);
+
+	Actor companionLeft(tex_companion, 128, 160, 32, 32, 4, objects, 0.0f, 0.0f, true, "companionL");
+	companionLeft.m_animations.push_back(CompAppear);
+	companionLeft.m_animations.push_back(CompDisappear);
+	companionLeft.m_animations.push_back(CompLoop);
+	companionLeft.currentAnimation = "compLoop";
+	//companionLeft.Disable();
+	objects.push_back(companionLeft);
+
+	Actor companionRight(tex_companion, 128, 160, 32, 32, 4, objects, 0.0f, 0.0f, true, "companionR");
+	companionRight.m_animations.push_back(CompAppear);
+	companionRight.m_animations.push_back(CompDisappear);
+	companionRight.m_animations.push_back(CompLoop);
+	companionRight.currentAnimation = "compLoop";
+	//companionRight.Disable();
+	objects.push_back(companionRight);
+
+	Actor explosion(tex_explosion, 80, 32, 16, 16, 4, objects, 0.5f, 0.5f, true, "explosion");
+	Animation expAnim("expAnim", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, false);
+	explosion.currentAnimation = "expAnim";
+	explosion.m_animations.push_back(expAnim);
 	objects.push_back(explosion);
 
 	Text txt_hi_score("Hi Score", tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
@@ -300,11 +333,16 @@ int main(int argc, char** argv)
 	std::map<float, Object> sortedObjects = SortObjects(objects);
 	float shipIndex = 0;
 	float missIndex = 0;
+	float missEnemyIndex = 0;
 	float bigSIndex = 0;
 	float medSIndex = 0;
 	float sSIndex = 0;
 	float explosionIndex = 0;
+	float compLIndex = 0;
+	float compRIndex = 0;
 	int stageS = 0;
+	bool doOnceSpace = true;
+	bool doOnceB = true;
 
 	for (std::map<float, Object>::iterator it = sortedObjects.begin(); it != sortedObjects.end(); it++)
 	{
@@ -315,6 +353,9 @@ int main(int argc, char** argv)
 		}
 		else if (it->second.m_name == "miss") {
 			missIndex = it->first;
+		}
+		else if (it->second.m_name == "missEnemy") {
+			missEnemyIndex = it->first;
 		}
 		else if (it->second.m_name == "bigS") {
 			bigSIndex = it->first;
@@ -330,10 +371,18 @@ int main(int argc, char** argv)
 		}
 		else if (it->second.m_name == "explosion") {
 			explosionIndex = it->first;
-
+		}
+		else if (it->second.m_name == "companionL") {
+			compLIndex = it->first;
+		}
+		else if (it->second.m_name == "companionR") {
+			compRIndex = it->first;
 		}
 	}
-	float mathAux;
+	float rows;
+	float companionOffset_x = 0;
+	float companionOffset_y = -0.08f;
+
 	while (isRunning) // render loop
 	{
 		int now = SDL_GetTicks();
@@ -371,14 +420,24 @@ int main(int argc, char** argv)
 		}
 		if (keyState[SDL_SCANCODE_W]) {
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
-			
+			companionOffset_y = companionOffset_y + 0.15f * deltaTime;
+			companionOffset_x = companionOffset_x + 0.025f * deltaTime;
 		}
 		if (keyState[SDL_SCANCODE_S]) {
 			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
+			companionOffset_y = companionOffset_y - 0.15f * deltaTime;
+			companionOffset_x = companionOffset_x - 0.025f * deltaTime;
 		}
 		if (keyState[SDL_SCANCODE_SPACE]) {
-			sortedObjects[explosionIndex].m_model = sortedObjects[missIndex].m_model;
-			sortedObjects[missIndex].m_model = sortedObjects[shipIndex].m_model;
+			if (doOnceSpace) {
+				sortedObjects[explosionIndex].m_model = sortedObjects[missIndex].m_model;
+				sortedObjects[explosionIndex].resetAnimation();
+				sortedObjects[missIndex].m_model = sortedObjects[shipIndex].m_model;
+				doOnceSpace = false;
+			}	
+		}
+		else {
+			doOnceSpace = true;
 		}
 		if (keyState[SDL_SCANCODE_1]) {
 			sortedObjects[missIndex].resetAnimation();
@@ -392,30 +451,44 @@ int main(int argc, char** argv)
 			sortedObjects[missIndex].resetAnimation();
 			sortedObjects[missIndex].currentAnimation = "type3";
 		}
-		if (keyState[SDL_SCANCODE_B] && frameTime >= 0.09f) {
-			switch (stageS) {
-			case 0:
-				sortedObjects[medSIndex].m_model = sortedObjects[bigSIndex].m_model;
-				sortedObjects[bigSIndex].m_model = glm::translate(sortedObjects[bigSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
-				stageS++;
-				break;
-			case 1:
-				sortedObjects[sSIndex].m_model = sortedObjects[medSIndex].m_model;
-				sortedObjects[medSIndex].m_model = glm::translate(sortedObjects[medSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
-				stageS++;
-				break;
-			case 2:
-				sortedObjects[bigSIndex].m_model = sortedObjects[sSIndex].m_model;
-				sortedObjects[sSIndex].m_model = glm::translate(sortedObjects[sSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
-				stageS = 0;
-				break;
+		if (keyState[SDL_SCANCODE_B]) {
+			if (doOnceB) {
+				switch (stageS) {
+				case 0:
+					sortedObjects[medSIndex].m_model = sortedObjects[bigSIndex].m_model;
+					sortedObjects[bigSIndex].m_model = glm::translate(sortedObjects[bigSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+					stageS++;
+					break;
+				case 1:
+					sortedObjects[sSIndex].m_model = sortedObjects[medSIndex].m_model;
+					sortedObjects[medSIndex].m_model = glm::translate(sortedObjects[medSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+					stageS++;
+					break;
+				case 2:
+					sortedObjects[bigSIndex].m_model = sortedObjects[sSIndex].m_model;
+					sortedObjects[sSIndex].m_model = glm::translate(sortedObjects[sSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+					stageS = 0;
+					break;
+				}
+				doOnceB = false;
 			}
-			
+		}
+		else {
+			doOnceB = true;
 		}
 
-		//missile
+		//missile move with time
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
-
+		sortedObjects[missEnemyIndex].m_model = glm::translate(sortedObjects[missEnemyIndex].m_model, glm::vec3(0.0f, -0.35f, 0.0f) * deltaTime);
+		//reset enemy projectile
+		if (now % 4000 == 0) {
+			sortedObjects[missEnemyIndex].m_model = glm::translate(loner.m_model, glm::vec3(-0.05f, 0.0f, 0.0f));
+		}
+		//companion left
+		sortedObjects[compLIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.25f - companionOffset_x, 0.0f + companionOffset_y, 0.0f));
+		//companion right
+		sortedObjects[compRIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(-0.25f + companionOffset_x, 0.0f + companionOffset_y, 0.0f));
+		//Cpman
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderProgram.use();
 
@@ -444,16 +517,19 @@ int main(int argc, char** argv)
 				frameTime = 0.0f;
 				if (it->second.m_animations.size() > 0) {
 					it->second.frameOffset_x = it->second.getAnimationByName(it->second.currentAnimation).getFrame() * it->second.frameWidth();
+					it->second.frameOffset_y = 0;
 					if (it->second.frameOffset_x >= 1)
 					{
-						mathAux = floor(it->second.frameOffset_x); //how many rows ex: offset_x = 5.4 then off set x = 0.4 and offset y = -5 
-						it->second.frameOffset_x -= mathAux; 
-						it->second.frameOffset_y = it->second.frameHeight() * mathAux;
+						rows = floor(it->second.frameOffset_x); //how many rows ex: offset_x = 5.4 then off set x = 0.4 and offset y = -5 
+						it->second.frameOffset_x -= rows; 
+						it->second.frameOffset_y = it->second.frameHeight() * -rows;
 
-						std::cout << it->second.frameOffset_x << std::endl;
-						std::cout << it->second.frameOffset_y << std::endl;
-
-						
+						if (it->first == compLIndex) {
+							std::cout << "x" << std::endl;
+							std::cout << it->second.frameOffset_x << std::endl;
+							std::cout << "y" << std::endl;
+							std::cout << it->second.frameOffset_y << std::endl;
+						}
 					}
 				}
 				else {
