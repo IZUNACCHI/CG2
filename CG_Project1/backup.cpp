@@ -96,6 +96,9 @@ int main(int argc, char** argv)
 	GLuint tex_missile_1;
 	LoadTexture(tex_missile_1, "resources/graphics/graphics/missile.bmp");
 
+	GLuint tex_missile_enemy;
+	LoadTexture(tex_missile_enemy, "resources/graphics/graphics/EnWeap6.bmp");
+
 	GLuint tex_ui_life;
 	LoadTexture(tex_ui_life, "resources/graphics/graphics/PULife.bmp");
 
@@ -181,6 +184,9 @@ int main(int argc, char** argv)
 	missile1.m_animations.push_back(type2);
 	missile1.m_animations.push_back(type3);
 	objects.push_back(missile1);
+
+	Actor enemyProj(tex_missile_enemy, 128, 16, 16, 16, 3, objects, -0.5f, 0.0f, true, "missEnemy");
+	objects.push_back(enemyProj);
 
 	Actor bigStone(tex_big_stone, 480, 480, 96, 96, 2, objects, 0.1f, 0.6f, true, "bigS");
 	objects.push_back(bigStone);
@@ -329,6 +335,7 @@ int main(int argc, char** argv)
 	std::map<float, Object> sortedObjects = SortObjects(objects);
 	float shipIndex = 0;
 	float missIndex = 0;
+	float missEnemyIndex = 0;
 	float bigSIndex = 0;
 	float medSIndex = 0;
 	float sSIndex = 0;
@@ -348,6 +355,9 @@ int main(int argc, char** argv)
 		}
 		else if (it->second.m_name == "miss") {
 			missIndex = it->first;
+		}
+		else if (it->second.m_name == "missEnemy") {
+			missEnemyIndex = it->first;
 		}
 		else if (it->second.m_name == "bigS") {
 			bigSIndex = it->first;
@@ -471,6 +481,11 @@ int main(int argc, char** argv)
 
 		//missile move with time
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
+		sortedObjects[missEnemyIndex].m_model = glm::translate(sortedObjects[missEnemyIndex].m_model, glm::vec3(0.0f, -0.35f, 0.0f) * deltaTime);
+		//reset enemy projectile
+		if (now % 5000 == 0) {
+			sortedObjects[missEnemyIndex].m_model = loner.m_model;
+		}
 		//companion left
 		sortedObjects[compLIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.25f - companionOffset_x, 0.0f + companionOffset_y, 0.0f));
 		//companion right
