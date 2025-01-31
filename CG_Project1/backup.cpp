@@ -141,8 +141,11 @@ int main(int argc, char** argv)
 
 	Actor background(tex_Background, 640, 480, 640, 480, 0, objects, false);
 	objects.push_back(background);
-	Actor parallax(tex_paralax, 512, 2048, 32, 11, 2, 304, 1, objects, 0.1f, 0.2f, false);
+	Actor parallax(tex_paralax, 512, 2048, 32, 11, 2, 304, 0.2, objects, 0.5f, 1.5f, false, "parallax");
 	objects.push_back(parallax);
+
+	Actor parallax2(tex_paralax, 512, 2048, 32, 11, 2, 304, 0.3, objects, -0.5f, 1.0f, false, "parallax2");
+	objects.push_back(parallax2);
 
 	Actor ui_life(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.9f, -0.5f, false);
 	objects.push_back(ui_life);
@@ -340,6 +343,8 @@ int main(int argc, char** argv)
 	float explosionIndex = 0;
 	float compLIndex = 0;
 	float compRIndex = 0;
+	float parallaxIndex = 0;
+	float parallax2Index = 0;
 	int stageS = 0;
 	bool doOnceSpace = true;
 	bool doOnceB = true;
@@ -377,6 +382,12 @@ int main(int argc, char** argv)
 		}
 		else if (it->second.m_name == "companionR") {
 			compRIndex = it->first;
+		}
+		else if (it->second.m_name == "parallax") {
+			parallaxIndex = it->first;
+		}
+		else if (it->second.m_name == "parallax2") {
+			parallax2Index = it->first;
 		}
 	}
 	float rows;
@@ -476,7 +487,16 @@ int main(int argc, char** argv)
 		else {
 			doOnceB = true;
 		}
-
+		//parallax
+		sortedObjects[parallaxIndex].m_model = glm::translate(sortedObjects[parallaxIndex].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
+		if (now % 25000 == 0) {
+				sortedObjects[parallaxIndex].m_model = parallax.m_model;
+		}
+		//parallax2
+		sortedObjects[parallax2Index].m_model = glm::translate(sortedObjects[parallax2Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
+		if (now % 25000 == 0) {
+			sortedObjects[parallax2Index].m_model = parallax2.m_model;
+		}
 		//missile move with time
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
 		sortedObjects[missEnemyIndex].m_model = glm::translate(sortedObjects[missEnemyIndex].m_model, glm::vec3(0.0f, -0.35f, 0.0f) * deltaTime);

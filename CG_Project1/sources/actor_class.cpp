@@ -111,7 +111,7 @@ Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float 
 	m_model = glm::translate(m_model, glm::vec3(x, y, 0.0f));
 }
 
-Actor::Actor(GLuint& texture, int tex_width, int tex_height, float tileSize, float tilesX, float tilesY, float start_index, float layer, std::vector<Object>& objects, float x, float y, bool banimate)
+Actor::Actor(GLuint& texture, int tex_width, int tex_height, float tileSize, float tilesX, float tilesY, float start_index, float layer, std::vector<Object>& objects, float x, float y, bool banimate, std::string name)
 	:m_id{ objectCount }
 {
 	p_texture = &texture;
@@ -122,6 +122,7 @@ Actor::Actor(GLuint& texture, int tex_width, int tex_height, float tileSize, flo
 	m_orderInLayer = layer / 10;
 	m_indices = { 0, 1, 3, 1, 2, 3 };
 	animate = banimate;
+	m_name = name;
 
 	glGenVertexArrays(1, &m_vao);
 
