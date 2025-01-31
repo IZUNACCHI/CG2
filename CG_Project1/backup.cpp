@@ -453,7 +453,7 @@ int main(int argc, char** argv)
 			sortedObjects[missIndex].resetAnimation();
 			sortedObjects[missIndex].currentAnimation = "type3";
 		}
-		if (keyState[SDL_SCANCODE_B] && frameTime >= 0.09f) {
+		if (keyState[SDL_SCANCODE_B]) {
 			if (doOnceB) {
 				switch (stageS) {
 				case 0:
