@@ -14,6 +14,7 @@
 //		-pos_x, -pos_y, orderInLayer,		0.0f,		1- frame_h,		//bottom left
 //		-pos_x,  pos_y, orderInLayer,		0.0f,		1.0f			//top left
 //	};
+//
 //}
 
 void PopulateVertices(std::vector<float>& vertices, float sprite_w, float sprite_h, float frame_w, float frame_h, float orderInLayer, unsigned int offsetX, unsigned int offsetY, unsigned int tilesX, unsigned int tilesY)
@@ -27,6 +28,14 @@ void PopulateVertices(std::vector<float>& vertices, float sprite_w, float sprite
 		 pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w * (offsetX + tilesX),	1.0f - (frame_h * (offsetY + tilesY)),	//bottom ri(ght
 		-pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w * offsetX,		1.0f - (frame_h * (offsetY + tilesY)),		//bottom left
 		-pos_x * tilesX,  pos_y * tilesY, orderInLayer,		frame_w * offsetX,		1.0f - (frame_h * offsetY)			//top left
+	};
+
+	vertices = {
+		//vertex coords						//texture coords
+		 pos_x * tilesX,  pos_y * tilesY, orderInLayer,		frame_w* offsetX,		1.0f - (frame_h * offsetY),			//top right
+		 pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w* offsetX,		1.0f - (frame_h * (offsetY + tilesY)),	//bottom ri(ght
+		-pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w* (offsetX + tilesX),	1.0f - (frame_h * (offsetY + tilesY)),		//bottom left
+		-pos_x * tilesX,  pos_y * tilesY, orderInLayer,		frame_w* (offsetX + tilesX),	1.0f - (frame_h * offsetY)			//top left
 	};
 }
 
