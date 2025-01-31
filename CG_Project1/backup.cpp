@@ -217,7 +217,7 @@ int main(int argc, char** argv)
 	//companionRight.Disable();
 	objects.push_back(companionRight);
 
-	Actor explosion(tex_explosion, 80, 32, 16, 16, 4, objects, 0.5f, 0.5f, true, "explosion");
+	Actor explosion(tex_explosion, 80, 32, 16, 16, 4, objects, 1.5f, 1.5f, true, "explosion");
 	Animation expAnim("expAnim", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, false);
 	explosion.currentAnimation = "expAnim";
 	explosion.m_animations.push_back(expAnim);
