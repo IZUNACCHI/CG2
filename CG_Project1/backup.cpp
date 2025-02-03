@@ -198,12 +198,35 @@ int main(int argc, char** argv)
 	Actor enemyProj(tex_missile_enemy, 128, 16, 16, 16, 1.9, objects, -0.55f, 0.0f, true, "missEnemy");
 	objects.push_back(enemyProj);
 
+	//Breakable asteroids
 	Actor bigStone(tex_big_stone, 480, 480, 96, 96, 2, objects, 0.1f, 0.6f, true, "bigS");
 	objects.push_back(bigStone);
+
 	Actor medStone(tex_med_stone, 512, 192, 64, 64, 2.1, objects, 0.0f, 1.8f, true, "medS");
 	objects.push_back(medStone);
+	Actor medStone1(tex_med_stone, 512, 192, 64, 64, 2.1, objects, 0.0f, 1.8f, true, "medS1");
+	objects.push_back(medStone1);
+	Actor medStone2(tex_med_stone, 512, 192, 64, 64, 2.1, objects, 0.0f, 1.8f, true, "medS2");
+	objects.push_back(medStone2);
+
 	Actor sStone(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS");
 	objects.push_back(sStone);
+	Actor sStone1(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS1");
+	objects.push_back(sStone1);
+	Actor sStone2(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS2");
+	objects.push_back(sStone2);
+	Actor sStone3(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS3");
+	objects.push_back(sStone3);
+	Actor sStone4(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS4");
+	objects.push_back(sStone4);
+	Actor sStone5(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS5");
+	objects.push_back(sStone5);
+	Actor sStone6(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS6");
+	objects.push_back(sStone6);
+	Actor sStone7(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS7");
+	objects.push_back(sStone7);
+	Actor sStone8(tex_s_stone, 256, 64, 32, 32, 2.2, objects, 0.0f, 1.8f, true, "sS8");
+	objects.push_back(sStone8);
 
 	//companion
 	Animation CompAppear("compAppear", { 16, 17, 18, 19 }, false);
@@ -232,19 +255,19 @@ int main(int argc, char** argv)
 	explosion.m_animations.push_back(expAnim);
 	objects.push_back(explosion);
 
-	Text txt_hi_score("Hi Score", tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.68f);
+	Text txt_hi_score("Hi Score", tex_Text_Small, small_chars_map, true, objects, -0.1f, 0.9f);
 	objects.push_back(txt_hi_score);
 
 	std::string highScore_text{ "0007497500" };
-	Text txt_hi_score1(highScore_text, tex_Text_Small, small_chars_map, true, objects, -0.125f, 0.64f);
+	Text txt_hi_score1(highScore_text, tex_Text_Small, small_chars_map, true, objects, -0.125f, 0.86f);
 	objects.push_back(txt_hi_score1);
 
 	std::string p1_text{ "Player One" };
-	Text txt_player_one(p1_text, tex_Text_Small, small_chars_map, true, objects, -0.95f, 0.68f);
+	Text txt_player_one(p1_text, tex_Text_Small, small_chars_map, true, objects, -0.95f, 0.9f);
 	objects.push_back(txt_player_one);
 
 	std::string score_text { "0003855055" };
-	Text txt_score(score_text, tex_Text_Big, big_chars_map, false, objects, -0.95f, 0.6f);
+	Text txt_score(score_text, tex_Text_Big, big_chars_map, false, objects, -0.95f, 0.82f);
 	objects.push_back(txt_score);
 
 	
@@ -312,7 +335,7 @@ int main(int argc, char** argv)
 	//std::cout << model[3].z << std::endl;
 
 	glm::mat4 projection;
-	projection = glm::ortho(-1.0f, 1.0f, -0.75f, 0.75f, 0.1f, 100.0f);
+	projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -351,7 +374,17 @@ int main(int argc, char** argv)
 	float missEnemyIndex = 0;
 	float bigSIndex = 0;
 	float medSIndex = 0;
+	float medS1Index= 0;
+	float medS2Index = 0;
 	float sSIndex = 0;
+	float sS1Index = 0;
+	float sS2Index = 0;
+	float sS3Index = 0;
+	float sS4Index = 0;
+	float sS5Index = 0;
+	float sS6Index = 0;
+	float sS7Index = 0;
+	float sS8Index = 0;
 	float explosionIndex = 0;
 	float compLIndex = 0;
 	float compRIndex = 0;
@@ -386,8 +419,48 @@ int main(int argc, char** argv)
 			medSIndex = it->first;
 
 		}
+		else if (it->second.m_name == "medS1") {
+			medS1Index = it->first;
+
+		}
+		else if (it->second.m_name == "medS2") {
+			medS2Index = it->first;
+
+		}
 		else if (it->second.m_name == "sS") {
 			sSIndex = it->first;
+
+		}
+		else if (it->second.m_name == "sS1") {
+			sS1Index = it->first;
+
+		}
+		else if (it->second.m_name == "sS2") {
+			sS2Index = it->first;
+
+		}
+		else if (it->second.m_name == "sS3") {
+			sS3Index = it->first;
+
+		}
+		else if (it->second.m_name == "sS4") {
+			sS4Index = it->first;
+
+		}
+		else if (it->second.m_name == "sS5") {
+			sS5Index = it->first;
+
+		}
+		else if (it->second.m_name == "sS6") {
+			sS6Index = it->first;
+
+		}
+		else if (it->second.m_name == "sS7") {
+			sS7Index = it->first;
+
+		}
+		else if (it->second.m_name == "sS8") {
+			sS8Index = it->first;
 
 		}
 		else if (it->second.m_name == "explosion") {
@@ -421,6 +494,10 @@ int main(int argc, char** argv)
 	float rows;
 	float companionOffset_x = 0;
 	float companionOffset_y = -0.08f;
+
+	bool transMedAst = false;
+	bool transSmallAst = false;
+	float astSpeed = 0.2f;
 
 	while (isRunning) // render loop
 	{
@@ -491,21 +568,46 @@ int main(int argc, char** argv)
 			sortedObjects[missIndex].currentAnimation = "type3";
 		}
 		if (keyState[SDL_SCANCODE_B]) {
+
 			if (doOnceB) {
 				switch (stageS) {
 				case 0:
 					sortedObjects[medSIndex].m_model = sortedObjects[bigSIndex].m_model;
+					sortedObjects[medS1Index].m_model = sortedObjects[bigSIndex].m_model;
+					sortedObjects[medS2Index].m_model = sortedObjects[bigSIndex].m_model;
 					sortedObjects[bigSIndex].m_model = glm::translate(sortedObjects[bigSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+					transMedAst = true;
 					stageS++;
 					break;
 				case 1:
 					sortedObjects[sSIndex].m_model = sortedObjects[medSIndex].m_model;
-					sortedObjects[medSIndex].m_model = glm::translate(sortedObjects[medSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+					sortedObjects[sS1Index].m_model = sortedObjects[medSIndex].m_model;
+					sortedObjects[sS2Index].m_model = sortedObjects[medSIndex].m_model;
+					sortedObjects[sS3Index].m_model = sortedObjects[medS1Index].m_model;
+					sortedObjects[sS4Index].m_model = sortedObjects[medS1Index].m_model;
+					sortedObjects[sS5Index].m_model = sortedObjects[medS1Index].m_model;
+					sortedObjects[sS6Index].m_model = sortedObjects[medS2Index].m_model;
+					sortedObjects[sS7Index].m_model = sortedObjects[medS2Index].m_model;
+					sortedObjects[sS8Index].m_model = sortedObjects[medS2Index].m_model;
+					sortedObjects[medSIndex].m_model = medStone.m_model;
+					sortedObjects[medS1Index].m_model = medStone1.m_model;
+					sortedObjects[medS2Index].m_model = medStone2.m_model;
+					transMedAst = false;
+					transSmallAst = true;
 					stageS++;
 					break;
 				case 2:
-					sortedObjects[bigSIndex].m_model = sortedObjects[sSIndex].m_model;
-					sortedObjects[sSIndex].m_model = glm::translate(sortedObjects[sSIndex].m_model, glm::vec3(1.2f, 0.0f, 0.0f));
+					sortedObjects[bigSIndex].m_model = bigStone.m_model;
+					sortedObjects[sSIndex].m_model = sStone.m_model;
+					sortedObjects[sS1Index].m_model = sStone1.m_model;
+					sortedObjects[sS2Index].m_model = sStone2.m_model;
+					sortedObjects[sS3Index].m_model = sStone3.m_model;
+					sortedObjects[sS4Index].m_model = sStone4.m_model;
+					sortedObjects[sS5Index].m_model = sStone5.m_model;
+					sortedObjects[sS6Index].m_model = sStone6.m_model;
+					sortedObjects[sS7Index].m_model = sStone7.m_model;
+					sortedObjects[sS8Index].m_model = sStone8.m_model;
+					transSmallAst = false;
 					stageS = 0;
 					break;
 				}
@@ -514,6 +616,26 @@ int main(int argc, char** argv)
 		}
 		else {
 			doOnceB = true;
+		}
+		if (transMedAst)
+		{
+			sortedObjects[medSIndex].m_model = glm::translate(sortedObjects[medSIndex].m_model, glm::vec3((-0.985f * astSpeed) * deltaTime, (- 0.174f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[medS1Index].m_model = glm::translate(sortedObjects[medS1Index].m_model, glm::vec3((-0.174f * astSpeed) * deltaTime, (-0.985f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[medS2Index].m_model = glm::translate(sortedObjects[medS2Index].m_model, glm::vec3((0.985f * astSpeed) * deltaTime, (-0.174f * astSpeed) * deltaTime, 0.0f));
+		}
+		if (transSmallAst)
+		{
+			sortedObjects[sSIndex].m_model = glm::translate(sortedObjects[sSIndex].m_model, glm::vec3((-0.985f * astSpeed) * deltaTime, (-0.174f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[sS1Index].m_model = glm::translate(sortedObjects[sS1Index].m_model, glm::vec3((-0.174f * astSpeed) * deltaTime, (-0.985f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[sS2Index].m_model = glm::translate(sortedObjects[sS2Index].m_model, glm::vec3((0.985f * astSpeed) * deltaTime, (-0.174f * astSpeed) * deltaTime, 0.0f));
+
+			sortedObjects[sS3Index].m_model = glm::translate(sortedObjects[sS3Index].m_model, glm::vec3((-0.985f * astSpeed) * deltaTime, (-0.174f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[sS4Index].m_model = glm::translate(sortedObjects[sS4Index].m_model, glm::vec3((-0.174f * astSpeed) * deltaTime, (-0.985f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[sS5Index].m_model = glm::translate(sortedObjects[sS5Index].m_model, glm::vec3((0.985f * astSpeed) * deltaTime, (-0.174f * astSpeed) * deltaTime, 0.0f));
+
+			sortedObjects[sS6Index].m_model = glm::translate(sortedObjects[sS6Index].m_model, glm::vec3((-0.985f * astSpeed) * deltaTime, (-0.174f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[sS7Index].m_model = glm::translate(sortedObjects[sS7Index].m_model, glm::vec3((-0.174f * astSpeed) * deltaTime, (-0.985f * astSpeed) * deltaTime, 0.0f));
+			sortedObjects[sS8Index].m_model = glm::translate(sortedObjects[sS8Index].m_model, glm::vec3((0.985f * astSpeed) * deltaTime, (-0.174f * astSpeed) * deltaTime, 0.0f));
 		}
 		//parallax
 		sortedObjects[parallax1Index].m_model = glm::translate(sortedObjects[parallax1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
