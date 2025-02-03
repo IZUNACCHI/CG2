@@ -135,7 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="sources\Animation.cpp" />
-    <ClCompile Include="backup.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="sources\loader_texture.cpp" />
     <ClCompile Include="sources\camera.cpp" />
     <ClCompile Include="glad.c" />
@@ -161,11 +161,9 @@
     <ClInclude Include="headers\loader_wavefront.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragmentshader.glsl" />
     <None Include="SDL2.dll" />
     <None Include="shaders\fragmentshader.glsl" />
     <None Include="shaders\vertexshader.glsl" />
-    <None Include="vertexshader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
