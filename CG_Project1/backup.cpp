@@ -149,11 +149,11 @@ int main(int argc, char** argv)
 	Actor parallax1_2(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.2, false, objects, 0.65f, 1.5f, false, "parallax1_2");
 	objects.push_back(parallax1_2);
 
-	Actor parallax2(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.3, true, objects, -0.65f, 0.6f, false, "parallax2");
+	Actor parallax2(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.3, true, objects, -0.65f, 1.7f, false, "parallax2");
 	objects.push_back(parallax2);
-	Actor parallax2_1(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.3, true, objects, -0.65f, 0.8f, false, "parallax2_1");
+	Actor parallax2_1(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.3, true, objects, -0.65f, 2.1f, false, "parallax2_1");
 	objects.push_back(parallax2_1);
-	Actor parallax2_2(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.3, true, objects, -0.65f, 1.0f, false, "parallax2_2");
+	Actor parallax2_2(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.3, true, objects, -0.65f, 2.5f, false, "parallax2_2");
 	objects.push_back(parallax2_2);
 
 	Actor ui_life(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.9f, -0.5f, false);
@@ -514,28 +514,28 @@ int main(int argc, char** argv)
 		}
 		//parallax
 		sortedObjects[parallax1Index].m_model = glm::translate(sortedObjects[parallax1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 10000) == 0) {
+		if (remainder(now, 35000) == 0) {
 				sortedObjects[parallax1Index].m_model = parallax1.m_model;
 		}
 		sortedObjects[parallax1_1Index].m_model = glm::translate(sortedObjects[parallax1_1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 10000) == 0) {
+		if (remainder(now, 35000) == 0) {
 			sortedObjects[parallax1_1Index].m_model = parallax1_1.m_model;
 		}
 		sortedObjects[parallax1_2Index].m_model = glm::translate(sortedObjects[parallax1_2Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 10000) == 0) {
+		if (remainder(now, 35000) == 0) {
 			sortedObjects[parallax1_2Index].m_model = parallax1_2.m_model;
 		}
 		//parallax2
 		sortedObjects[parallax2Index].m_model = glm::translate(sortedObjects[parallax2Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 10000) == 0) {
+		if (remainder(now, 35000) == 0) {
 			sortedObjects[parallax2Index].m_model = parallax2.m_model;
 		}
 		sortedObjects[parallax2_1Index].m_model = glm::translate(sortedObjects[parallax2_1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 10000) == 0) {
+		if (remainder(now, 35000) == 0) {
 			sortedObjects[parallax2_1Index].m_model = parallax2_1.m_model;
 		}
 		sortedObjects[parallax2_2Index].m_model = glm::translate(sortedObjects[parallax2_2Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 10000) == 0) {
+		if (remainder(now, 35000) == 0) {
 			sortedObjects[parallax2_2Index].m_model = parallax2_2.m_model;
 		}
 		//missile move with time

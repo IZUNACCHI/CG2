@@ -88,14 +88,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\lightfragment.glsl" />
-    <None Include="shaders\lightvertex.glsl" />
-    <None Include="shaders\phongfragmentshader.glsl" />
-    <None Include="shaders\phongvertexshader.glsl" />
-    <None Include="shaders\gouraudfragmentmaterialshader.glsl" />
-    <None Include="shaders\gouraudvertexmaterialshader.glsl" />
-    <None Include="shaders\phongfragmentmaterialshader.glsl" />
-    <None Include="shaders\phongvertexmaterialshader.glsl" />
     <None Include="SDL2.dll" />
     <None Include="vertexshader.glsl" />
     <None Include="fragmentshader.glsl" />
