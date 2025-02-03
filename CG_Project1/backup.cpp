@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 	missile1.m_animations.push_back(type3);
 	objects.push_back(missile1);
 
-	Actor enemyProj(tex_missile_enemy, 128, 16, 16, 16, 3, objects, -0.55f, 0.0f, true, "missEnemy");
+	Actor enemyProj(tex_missile_enemy, 128, 16, 16, 16, 1.9, objects, -0.55f, 0.0f, true, "missEnemy");
 	objects.push_back(enemyProj);
 
 	Actor bigStone(tex_big_stone, 480, 480, 96, 96, 2, objects, 0.1f, 0.6f, true, "bigS");
@@ -307,6 +307,9 @@ int main(int argc, char** argv)
 
 	glm::mat4 model(1.0f);
 	//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+	//model = glm::translate(m_model, glm::vec3(0.0f, 0.0f, 0.0f));
+	//std::cout << glm::to_string(model) << std::endl;
+	//std::cout << model[3].z << std::endl;
 
 	glm::mat4 projection;
 	projection = glm::ortho(-1.0f, 1.0f, -0.75f, 0.75f, 0.1f, 100.0f);
@@ -514,35 +517,37 @@ int main(int argc, char** argv)
 		}
 		//parallax
 		sortedObjects[parallax1Index].m_model = glm::translate(sortedObjects[parallax1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 35000) == 0) {
-				sortedObjects[parallax1Index].m_model = parallax1.m_model;
+		if (sortedObjects[parallax1Index].m_model[3].y <= -1.0) {
+			std::cout <<  glm::to_string(sortedObjects[parallax1Index].m_model) << std::endl;
+			sortedObjects[parallax1Index].m_model = parallax1.m_model;
+		    std::cout << glm::to_string(sortedObjects[parallax1Index].m_model) << std::endl;
 		}
 		sortedObjects[parallax1_1Index].m_model = glm::translate(sortedObjects[parallax1_1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 35000) == 0) {
+		if (sortedObjects[parallax1_1Index].m_model[3].y <= -1.0) {
 			sortedObjects[parallax1_1Index].m_model = parallax1_1.m_model;
 		}
 		sortedObjects[parallax1_2Index].m_model = glm::translate(sortedObjects[parallax1_2Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 35000) == 0) {
+		if (sortedObjects[parallax1_2Index].m_model[3].y <= -1.0) {
 			sortedObjects[parallax1_2Index].m_model = parallax1_2.m_model;
 		}
 		//parallax2
 		sortedObjects[parallax2Index].m_model = glm::translate(sortedObjects[parallax2Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 35000) == 0) {
+		if (sortedObjects[parallax2Index].m_model[3].y <= -1.0) {
 			sortedObjects[parallax2Index].m_model = parallax2.m_model;
 		}
 		sortedObjects[parallax2_1Index].m_model = glm::translate(sortedObjects[parallax2_1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 35000) == 0) {
+		if (sortedObjects[parallax2_1Index].m_model[3].y <= -1.0) {
 			sortedObjects[parallax2_1Index].m_model = parallax2_1.m_model;
 		}
 		sortedObjects[parallax2_2Index].m_model = glm::translate(sortedObjects[parallax2_2Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
-		if (remainder(now, 35000) == 0) {
+		if (sortedObjects[parallax2_2Index].m_model[3].y <= -1.0) {
 			sortedObjects[parallax2_2Index].m_model = parallax2_2.m_model;
 		}
 		//missile move with time
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
 		sortedObjects[missEnemyIndex].m_model = glm::translate(sortedObjects[missEnemyIndex].m_model, glm::vec3(0.0f, -0.35f, 0.0f) * deltaTime);
 		//reset enemy projectile
-		if (now % 4000 == 0) {
+		if (sortedObjects[missEnemyIndex].m_model[3].y <= -1.0) {
 			sortedObjects[missEnemyIndex].m_model = glm::translate(loner.m_model, glm::vec3(-0.05f, 0.0f, 0.0f));
 		}
 		//companion left
@@ -585,12 +590,12 @@ int main(int argc, char** argv)
 						it->second.frameOffset_x -= rows; 
 						it->second.frameOffset_y = it->second.frameHeight() * -rows;
 
-						if (it->first == compLIndex) {
-							std::cout << "x" << std::endl;
-							std::cout << it->second.frameOffset_x << std::endl;
-							std::cout << "y" << std::endl;
-							std::cout << it->second.frameOffset_y << std::endl;
-						}
+						//if (it->first == compLIndex) {
+						//	std::cout << "x" << std::endl;
+						//	std::cout << it->second.frameOffset_x << std::endl;
+						//	std::cout << "y" << std::endl;
+						//	std::cout << it->second.frameOffset_y << std::endl;
+						//}
 					}
 				}
 				else {

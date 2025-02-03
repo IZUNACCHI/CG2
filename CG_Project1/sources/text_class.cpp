@@ -79,10 +79,10 @@ Text::Text(std::string& sentence, GLuint& texture, std::map<char, std::vector<fl
 	m_frameHeight = m_height / m_textureHeight;
 
 	PopulateVertices(m_vertices, letters, mapped_chars, m_width, m_orderInLayer);
-	for (unsigned int i = 0; i < m_vertices.size(); i++)
+	/*for (unsigned int i = 0; i < m_vertices.size(); i++)
 	{
 		std::cout << m_vertices[i] << std::endl;
-	}
+	}*/
 	PopulateIndices(m_indices, letters);
 	objectCount++;
 	objects.reserve(objectCount);
@@ -116,10 +116,10 @@ Text::Text(const char* sentence, GLuint& texture, std::map<char, std::vector<flo
 	m_frameHeight = m_height / m_textureHeight;
 
 	PopulateVertices(m_vertices, letters, mapped_chars, m_width, m_orderInLayer);
-	for (unsigned int i = 0; i < m_vertices.size(); i++)
+	/*for (unsigned int i = 0; i < m_vertices.size(); i++)
 	{
 		std::cout << m_vertices[i] << std::endl;
-	}
+	}*/
 	PopulateIndices(m_indices, letters);
 	objectCount++;
 	objects.reserve(objectCount);
