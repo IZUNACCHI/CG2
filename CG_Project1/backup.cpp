@@ -129,6 +129,9 @@ int main(int argc, char** argv)
 	GLuint tex_companion;
 	LoadTexture(tex_companion, "resources/graphics/graphics/clone.bmp");
 
+	GLuint tex_hp;
+	LoadTexture(tex_hp, "resources/graphics/graphics/HP.bmp");
+
 	// The only thing the user must do is initialize an "Object" and push it back into the vector of objects.
 	Actor drone(tex_Drone, 256, 64, 32, 32, 2, objects, true);
 	objects.push_back(drone);
@@ -271,6 +274,15 @@ int main(int argc, char** argv)
 	Text txt_score(score_text, tex_Text_Big, big_chars_map, false, objects, -0.95f, 0.82f);
 	objects.push_back(txt_score);
 
+	Actor hp(tex_hp, 144, 16, 144, 6, 9, objects, -0.7f, -0.65f, true, "hp");
+	Animation full("full", { 0 }, true);
+	Animation med("med", { 1 }, true);
+	Animation low("low", { 2 }, true);
+	hp.m_animations.push_back(full);
+	hp.m_animations.push_back(med);
+	hp.m_animations.push_back(low);
+	hp.currentAnimation = "full";
+	objects.push_back(hp);
 	
 	size_t vbo_size = 0;
 	size_t ibo_size = 0;
@@ -396,6 +408,7 @@ int main(int argc, char** argv)
 	float parallax2Index = 0;
 	float parallax2_1Index = 0;
 	float parallax2_2Index = 0;
+	float hpIndex = 0;
 	int stageS = 0;
 	bool doOnceSpace = true;
 	bool doOnceB = true;
@@ -492,6 +505,9 @@ int main(int argc, char** argv)
 		else if (it->second.m_name == "parallax2_2") {
 			parallax2_2Index = it->first;
 		}
+		else if (it->second.m_name == "hp") {
+			hpIndex = it->first;
+		}
 	}
 	float rows;
 	float companionOffset_x = 0;
@@ -581,6 +597,18 @@ int main(int argc, char** argv)
 		else if (keyState[SDL_SCANCODE_3]) {
 			sortedObjects[missIndex].resetAnimation();
 			sortedObjects[missIndex].currentAnimation = "type3";
+		}
+		if (keyState[SDL_SCANCODE_4]) {
+			sortedObjects[hpIndex].resetAnimation();
+			sortedObjects[hpIndex].currentAnimation = "full";
+		}
+		else if (keyState[SDL_SCANCODE_5]) {
+			sortedObjects[hpIndex].resetAnimation();
+			sortedObjects[hpIndex].currentAnimation = "med";
+		}
+		else if (keyState[SDL_SCANCODE_6]) {
+			sortedObjects[hpIndex].resetAnimation();
+			sortedObjects[hpIndex].currentAnimation = "low";
 		}
 		if (keyState[SDL_SCANCODE_B]) {
 
