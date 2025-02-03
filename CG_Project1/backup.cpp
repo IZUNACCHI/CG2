@@ -436,19 +436,23 @@ int main(int argc, char** argv)
 		const Uint8* keyState = SDL_GetKeyboardState(nullptr);
 		//ship
 		if (keyState[SDL_SCANCODE_A]) {
-			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime);
-			if (sortedObjects[shipIndex].currentAnimation != "left") {
-				sortedObjects[shipIndex].resetAnimation();
+			if (sortedObjects[shipIndex].m_model[3].x > -0.9f) {
+				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime);
+				if (sortedObjects[shipIndex].currentAnimation != "left") {
+					sortedObjects[shipIndex].resetAnimation();
+				}
+				sortedObjects[shipIndex].currentAnimation = "left";
 			}
-			sortedObjects[shipIndex].currentAnimation = "left";
 		}
 		else {
 			if (keyState[SDL_SCANCODE_D]) {
-				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(1.0f, 0.0f, 0.0f) * deltaTime);
-				if (sortedObjects[shipIndex].currentAnimation != "right") {
-					sortedObjects[shipIndex].resetAnimation();
+				if (sortedObjects[shipIndex].m_model[3].x < 0.9f) {
+					sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(1.0f, 0.0f, 0.0f) * deltaTime);
+					if (sortedObjects[shipIndex].currentAnimation != "right") {
+						sortedObjects[shipIndex].resetAnimation();
+					}
+					sortedObjects[shipIndex].currentAnimation = "right";
 				}
-				sortedObjects[shipIndex].currentAnimation = "right";
 			}
 			else {
 				if (sortedObjects[shipIndex].currentAnimation != "center") {
@@ -458,14 +462,18 @@ int main(int argc, char** argv)
 			}
 		}
 		if (keyState[SDL_SCANCODE_W]) {
-			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
-			companionOffset_y = companionOffset_y + 0.15f * deltaTime;
-			companionOffset_x = companionOffset_x + 0.025f * deltaTime;
+			if (sortedObjects[shipIndex].m_model[3].y < 0.6f) {
+				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
+				companionOffset_y = companionOffset_y + 0.15f * deltaTime;
+				companionOffset_x = companionOffset_x + 0.025f * deltaTime;
+			}
 		}
 		if (keyState[SDL_SCANCODE_S]) {
-			sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
-			companionOffset_y = companionOffset_y - 0.15f * deltaTime;
-			companionOffset_x = companionOffset_x - 0.025f * deltaTime;
+			if (sortedObjects[shipIndex].m_model[3].y > -0.6f) {
+				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
+				companionOffset_y = companionOffset_y - 0.15f * deltaTime;
+				companionOffset_x = companionOffset_x - 0.025f * deltaTime;
+			}
 		}
 		if (keyState[SDL_SCANCODE_SPACE]) {
 			if (doOnceSpace) {
@@ -518,9 +526,7 @@ int main(int argc, char** argv)
 		//parallax
 		sortedObjects[parallax1Index].m_model = glm::translate(sortedObjects[parallax1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
 		if (sortedObjects[parallax1Index].m_model[3].y <= -1.0) {
-			std::cout <<  glm::to_string(sortedObjects[parallax1Index].m_model) << std::endl;
 			sortedObjects[parallax1Index].m_model = parallax1.m_model;
-		    std::cout << glm::to_string(sortedObjects[parallax1Index].m_model) << std::endl;
 		}
 		sortedObjects[parallax1_1Index].m_model = glm::translate(sortedObjects[parallax1_1Index].m_model, glm::vec3(0.0f, -0.1f, 0.0f) * deltaTime);
 		if (sortedObjects[parallax1_1Index].m_model[3].y <= -1.0) {
@@ -557,7 +563,6 @@ int main(int argc, char** argv)
 		//Cpman
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderProgram.use();
-
 		shaderProgram.setMat4("view", view);
 		shaderProgram.setMat4("projection", projection);
 
@@ -590,12 +595,6 @@ int main(int argc, char** argv)
 						it->second.frameOffset_x -= rows; 
 						it->second.frameOffset_y = it->second.frameHeight() * -rows;
 
-						//if (it->first == compLIndex) {
-						//	std::cout << "x" << std::endl;
-						//	std::cout << it->second.frameOffset_x << std::endl;
-						//	std::cout << "y" << std::endl;
-						//	std::cout << it->second.frameOffset_y << std::endl;
-						//}
 					}
 				}
 				else {
