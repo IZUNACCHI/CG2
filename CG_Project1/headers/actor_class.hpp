@@ -19,7 +19,7 @@ public:
 	Actor(GLuint& texture, int tex_width, int tex_height, float width, float height, float layer, std::vector<Object>& objects, bool banimate);
 	Actor(GLuint& texture, int tex_width, int tex_height, float width, float height, float layer, std::vector<Object>& objects, float x, float y, bool banimate);
 	Actor(GLuint& texture, int tex_width, int tex_height, float width, float height, float layer, std::vector<Object>& objects, float x, float y, bool banimate, std::string name);
-	Actor(GLuint& texture, int tex_width, int tex_height, float tileSize, float tilesX, float tilesY, float start_index, float layer, std::vector<Object>& objects, float x, float y, bool banimate, std::string name);
+	Actor(GLuint& texture, int tex_width, int tex_height, float tileSize, float tilesX, float tilesY, float start_index, float layer, bool flip, std::vector<Object>& objects, float x, float y, bool banimate, std::string name);
 	
 	void printVs();
 	
