@@ -159,9 +159,9 @@ int main(int argc, char** argv)
 	Actor parallax2_2(tex_paralax, 512, 2048, 32, 7, 4, 706, 0.3, true, objects, -0.65f, 2.5f, false, "parallax2_2");
 	objects.push_back(parallax2_2);
 
-	Actor ui_life(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.9f, -0.5f, false);
+	Actor ui_life(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.9f, -0.8f, false);
 	objects.push_back(ui_life);
-	Actor ui_life1(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.79f, -0.5f, false);
+	Actor ui_life1(tex_ui_life, 32, 32, 32, 32, 4, objects, -0.79f, -0.8f, false);
 	objects.push_back(ui_life1);
 
 	Actor pu_shield(tex_PU_shield, 128, 64, 32, 32, 1, objects, 0.4f, 0.3f, true);
@@ -274,7 +274,7 @@ int main(int argc, char** argv)
 	Text txt_score(score_text, tex_Text_Big, big_chars_map, false, objects, -0.95f, 0.82f);
 	objects.push_back(txt_score);
 
-	Actor hp(tex_hp, 144, 16, 144, 6, 9, objects, -0.7f, -0.65f, true, "hp");
+	Actor hp(tex_hp, 144, 16, 144, 6, 9, objects, -0.7f, -0.9f, true, "hp");
 	Animation full("full", { 0 }, true);
 	Animation med("med", { 1 }, true);
 	Animation low("low", { 2 }, true);
@@ -562,14 +562,14 @@ int main(int argc, char** argv)
 			}
 		}
 		if (keyState[SDL_SCANCODE_W]) {
-			if (sortedObjects[shipIndex].m_model[3].y < 0.6f) {
+			if (sortedObjects[shipIndex].m_model[3].y < 0.85f) {
 				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
 				companionOffset_y = companionOffset_y + 0.15f * deltaTime;
 				companionOffset_x = companionOffset_x + 0.025f * deltaTime;
 			}
 		}
 		if (keyState[SDL_SCANCODE_S]) {
-			if (sortedObjects[shipIndex].m_model[3].y > -0.6f) {
+			if (sortedObjects[shipIndex].m_model[3].y > -0.85f) {
 				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime);
 				companionOffset_y = companionOffset_y - 0.15f * deltaTime;
 				companionOffset_x = companionOffset_x - 0.025f * deltaTime;
