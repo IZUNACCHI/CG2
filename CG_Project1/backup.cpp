@@ -422,6 +422,7 @@ int main(int argc, char** argv)
 	float companionOffset_x = 0;
 	float companionOffset_y = -0.08f;
 
+	glm::vec2 shipTarget = glm::vec2(sortedObjects[shipIndex].m_model[3].x, sortedObjects[shipIndex].m_model[3].y) * 2.0f;
 	while (isRunning) // render loop
 	{
 		int now = SDL_GetTicks();
@@ -551,15 +552,19 @@ int main(int argc, char** argv)
 		}
 		//missile move with time
 		sortedObjects[missIndex].m_model = glm::translate(sortedObjects[missIndex].m_model, glm::vec3(0.0f, 1.0f, 0.0f) * deltaTime);
-		sortedObjects[missEnemyIndex].m_model = glm::translate(sortedObjects[missEnemyIndex].m_model, glm::vec3(0.0f, -0.35f, 0.0f) * deltaTime);
+		sortedObjects[missEnemyIndex].m_model = glm::translate(sortedObjects[missEnemyIndex].m_model, glm::normalize(glm::vec3(shipTarget.x - loner.m_model[3].x, shipTarget.y - loner.m_model[3].y, 0.0f)) * deltaTime);
 		//reset enemy projectile
-		if (sortedObjects[missEnemyIndex].m_model[3].y <= -1.0) {
+		if (sortedObjects[missEnemyIndex].m_model[3].y <= -1.0f || sortedObjects[missEnemyIndex].m_model[3].y >= 1.0f || sortedObjects[missEnemyIndex].m_model[3].x <= -1.0f || sortedObjects[missEnemyIndex].m_model[3].x >= 1.0f) {
+			shipTarget = glm::vec2(sortedObjects[shipIndex].m_model[3].x, sortedObjects[shipIndex].m_model[3].y);
 			sortedObjects[missEnemyIndex].m_model = glm::translate(loner.m_model, glm::vec3(-0.05f, 0.0f, 0.0f));
 		}
+		
+
 		//companion left
 		sortedObjects[compLIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(0.25f - companionOffset_x, 0.0f + companionOffset_y, 0.0f));
 		//companion right
 		sortedObjects[compRIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(-0.25f + companionOffset_x, 0.0f + companionOffset_y, 0.0f));
+		
 		//Cpman
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shaderProgram.use();
