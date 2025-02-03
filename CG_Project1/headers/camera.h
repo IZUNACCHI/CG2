@@ -15,8 +15,9 @@ enum CameraMovement {
 class Camera
 {
 public:
+	Camera(glm::vec3 cameraPosition, glm::vec3 up, float yaw, float pitch);
 	//Camera(glm::vec3 cameraPosition, glm::vec3 up, float yaw, float pitch, glm::vec3 cameraTarget);
-	Camera(glm::vec3 cameraPosition, glm::vec3 up, glm::vec3 cameraTarget);
+	//Camera(glm::vec3 cameraPosition, glm::vec3 up, glm::vec3 cameraTarget);
 
 	glm::mat4 getViewMatrix() const;
 
@@ -25,23 +26,22 @@ public:
 	//void processMouseScroll(float yoffset);
 	//float getFov() const { return fov; };
 	inline glm::vec3 GetPosition() { return position; };
+	void move(float movementSpeed, float deltaTime);
 
 private:
-	//void updateCameraVectors();
-	//void move(CameraMovement direction, float velocity);
+	void updateCameraVectors();
 
 private:
 	glm::vec3 position;
-	//glm::vec3 front;
-	//glm::vec3 up;
-	//glm::vec3 right;
+	glm::vec3 front;
+	glm::vec3 up;
+	glm::vec3 right;
 	glm::vec3 worldUp;
-	//glm::vec3 hfront;
-	glm::vec3 target;
+	glm::vec3 hfront;
 
-	//float yaw;
-	//float pitch;
-	//float movementSpeed;
+	float yaw;
+	float pitch;
+	float movementSpeed;
 	//float mouseSensitivity;
 	//float fov;
 

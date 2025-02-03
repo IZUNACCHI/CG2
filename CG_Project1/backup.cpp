@@ -173,7 +173,8 @@ int main(int argc, char** argv)
 	Actor aster_metal_small(tex_aster_metal_3, 256, 64, 32, 32, 1.2, objects, 0.6f, -0.4f, true);
 	objects.push_back(aster_metal_small);
 	
-	Actor ship(tex_Ship, 448, 64, 64, 64, 3, objects, 0.0f, -0.5f, true, "ship");
+	float playerLayer = 3;
+	Actor ship(tex_Ship, 448, 64, 64, 64, playerLayer, objects, 0.0f, -0.5f, true, "ship");
 	Animation left("left", { 2, 1, 0}, false);
 	Animation right("right", { 4, 5, 6}, false);
 	Animation center("center", { 3 }, true);
@@ -323,7 +324,8 @@ int main(int argc, char** argv)
 		vertexbufferoffset += objects[i].vertexBufferSize();
 	}
 
-	Camera camera(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	//Camera camera(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 
 	glm::mat4 view;
 	view = camera.getViewMatrix();
@@ -511,8 +513,12 @@ int main(int argc, char** argv)
 			if (event.type == SDL_QUIT || SDL_GetKeyboardState(NULL)[SDL_SCANCODE_ESCAPE])
 				isRunning = false;
 		}
+
+		//camera.move(2.5f, deltaTime);
+
 		const Uint8* keyState = SDL_GetKeyboardState(nullptr);
 		//ship
+		sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(camera.GetPosition().x, camera.GetPosition().y, 0.0f));
 		if (keyState[SDL_SCANCODE_A]) {
 			if (sortedObjects[shipIndex].m_model[3].x > -0.9f) {
 				sortedObjects[shipIndex].m_model = glm::translate(sortedObjects[shipIndex].m_model, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime);
