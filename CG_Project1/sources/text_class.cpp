@@ -54,38 +54,11 @@ void PopulateIndices(std::vector<unsigned int>& indices, std::vector<char>& lett
 	}
 }
 
-Text::Text(std::vector<char>& letters, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects)
-	:m_letters{ letters }
+Text::Text(std::string& sentence, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects, float x, float y)
 {
 	glGenVertexArrays(1, &m_vao);
-	p_texture = &texture;
-	m_orderInLayer = 4.0f / 10.0f;
-	if (smalltxt)
-	{
-		m_textureWidth = 64;
-		m_textureHeight = 128;
-		m_width = m_height = 8;
-	}
-	else
-	{
-		m_textureWidth = 128;
-		m_textureHeight = 192;
-		m_width = m_height = 16;
-	}
 
-	m_frameWidth = m_width / m_textureWidth;
-	m_frameHeight = m_height / m_textureHeight;
-
-	PopulateVertices(m_vertices, letters, mapped_chars, m_width, m_orderInLayer);
-	PopulateIndices(m_indices, letters);
-	objectCount++;
-	objects.reserve(objectCount);
-}
-
-Text::Text(std::vector<char>& letters, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects, float x, float y)
-	:m_letters{ letters }
-{
-	glGenVertexArrays(1, &m_vao);
+	std::vector<char> letters(sentence.begin(), sentence.end());
 
 	p_texture = &texture;
 	m_orderInLayer = 4.0f / 10.0f;
@@ -106,10 +79,47 @@ Text::Text(std::vector<char>& letters, GLuint& texture, std::map<char, std::vect
 	m_frameHeight = m_height / m_textureHeight;
 
 	PopulateVertices(m_vertices, letters, mapped_chars, m_width, m_orderInLayer);
-	for (unsigned int i = 0; i < m_vertices.size(); i++)
+	/*for (unsigned int i = 0; i < m_vertices.size(); i++)
 	{
 		std::cout << m_vertices[i] << std::endl;
+	}*/
+	PopulateIndices(m_indices, letters);
+	objectCount++;
+	objects.reserve(objectCount);
+
+	m_model = glm::translate(m_model, glm::vec3(x, y, 0.0f));
+}
+
+Text::Text(const char* sentence, GLuint& texture, std::map<char, std::vector<float>> mapped_chars, bool smalltxt, std::vector<Object>& objects, float x, float y)
+{
+	glGenVertexArrays(1, &m_vao);
+
+	std::string s{ sentence };
+	std::vector<char> letters(s.begin(), s.end());
+
+	p_texture = &texture;
+	m_orderInLayer = 4.0f / 10.0f;
+	if (smalltxt)
+	{
+		m_textureWidth = 64;
+		m_textureHeight = 128;
+		m_width = m_height = 16;
 	}
+	else
+	{
+		m_textureWidth = 128;
+		m_textureHeight = 192;
+		m_width = m_height = 32;
+	}
+
+	m_frameWidth = m_width / m_textureWidth;
+	m_frameHeight = m_height / m_textureHeight;
+
+	PopulateVertices(m_vertices, letters, mapped_chars, m_width, m_orderInLayer);
+	/*for (unsigned int i = 0; i < m_vertices.size(); i++)
+	{
+		std::cout << m_vertices[i] << std::endl;
+	}*/
 	PopulateIndices(m_indices, letters);
 	objectCount++;
 	objects.reserve(objectCount);

@@ -36,6 +36,10 @@ public:
 	Animation& getAnimationByName(std::string name);
 	void setAnimation(std::string name);
 	void resetAnimation();
+	void NextAnimation();
+
+	void Enable();
+	void Disable();
 
 	bool animate = false;
 
@@ -52,6 +56,7 @@ protected:
 	int m_textureHeight;
 	float m_frameWidth;
 	float m_frameHeight;
+	bool m_enabled;
 
 	GLuint* p_texture;
 	GLuint m_vao;

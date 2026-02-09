@@ -12,6 +12,8 @@ public:
 	std::vector<int> m_frameIndexes;
 	int m_currentFrame;
 	bool m_loop;
+	std::string m_nextAnim;
+	bool m_readyNext;
 private:
 	
 };

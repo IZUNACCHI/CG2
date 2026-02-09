@@ -2,23 +2,31 @@
 #include "actor_class.hpp"
 #include "loader_texture.hpp"
 
-void PopulateVertices(std::vector<float>& vertices, float sprite_w, float sprite_h, float frame_w, float frame_h, float orderInLayer)
+void PopulateVertices(std::vector<float>& vertices, float sprite_w, float sprite_h, float frame_w, float frame_h, float orderInLayer, unsigned int offsetX, unsigned int offsetY, unsigned int tilesX, unsigned int tilesY, bool flip)
 {
 	const float pos_x{ (sprite_w) / 640 };
 	const float pos_y{ (sprite_h) / 480 };
 
-	vertices = {
-		//vertex coords						//texture coords
-		 pos_x,  pos_y, orderInLayer,		frame_w,	1.0f,			//top right
-		 pos_x, -pos_y, orderInLayer,		frame_w,	1 - frame_h,	//bottom right
-		-pos_x, -pos_y, orderInLayer,		0.0f,		1- frame_h,		//bottom left
-		-pos_x,	 pos_y, orderInLayer,		0.0f,		1.0f			//top left
-	};
-
-	//for (int i = 0; i < vertices.size(); i++)
-	//{
-	//	std::cout << vertices[i] << std::endl;
-	//}
+	if (flip)
+	{
+		vertices = {
+			//vertex coords						//texture coords
+			 pos_x * tilesX,  pos_y * tilesY, orderInLayer,		frame_w * offsetX,				1.0f - (frame_h * offsetY),			//top right
+			 pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w * offsetX,				1.0f - (frame_h * (offsetY + tilesY)),	//bottom ri(ght
+			-pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w * (offsetX + tilesX),	1.0f - (frame_h * (offsetY + tilesY)),		//bottom left
+			-pos_x * tilesX,  pos_y * tilesY, orderInLayer,		frame_w * (offsetX + tilesX),	1.0f - (frame_h * offsetY)			//top left
+		};
+	}
+	else
+	{
+		vertices = {
+			//vertex coords						//texture coords
+			 pos_x * tilesX,  pos_y * tilesY, orderInLayer,		frame_w * (offsetX + tilesX),	1.0f - (frame_h * offsetY),			//top right
+			 pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w * (offsetX + tilesX),	1.0f - (frame_h * (offsetY + tilesY)),	//bottom ri(ght
+			-pos_x * tilesX, -pos_y * tilesY, orderInLayer,		frame_w * offsetX,				1.0f - (frame_h * (offsetY + tilesY)),		//bottom left
+			-pos_x * tilesX,  pos_y * tilesY, orderInLayer,		frame_w * offsetX,				1.0f - (frame_h * offsetY)			//top left
+		};
+	}
 }
 
 void Translate(glm::mat4& model, glm::vec3 transPos)
@@ -43,12 +51,12 @@ Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float 
 	animate = banimate;
 
 	glGenVertexArrays(1, &m_vao);
-
+	  
 	m_frameWidth = { m_width / m_textureWidth };
 	m_frameHeight = { m_height / m_textureHeight };
 
 
-	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer);
+	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer, 0, 0, 1, 1, false);
 	objectCount++;
 	objects.reserve(objectCount);
 }
@@ -70,7 +78,7 @@ Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float 
 	m_frameWidth = { m_width / m_textureWidth };
 	m_frameHeight = { m_height / m_textureHeight };
 
-	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer);
+	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer, 0, 0, 1, 1, false);
 	objectCount++;
 	objects.reserve(objectCount);
 
@@ -95,101 +103,40 @@ Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float 
 	m_frameWidth = { m_width / m_textureWidth };
 	m_frameHeight = { m_height / m_textureHeight };
 
-	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer);
+	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer, 0, 0, 1, 1, false);
 	objectCount++;
 	objects.reserve(objectCount);
 
 	m_model = glm::translate(m_model, glm::vec3(x, y, 0.0f));
 }
 
-//Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float height, float layer, std::vector<Actor>& objects, bool animate)
-//	:m_model(1.0f), p_texture{ &texture }, m_textureWidth{ tex_width }, m_textureHeight{ tex_height }, m_width{ width }, m_height{ height },
-//	m_orderInLayer{ (layer / 10) }, m_indices{ 0, 1, 3, 1, 2, 3 }, animate{ animate }, m_vao{}
-//{
-//
-//	p_texture = &texture;
-//	m_textureWidth = tex_width;
-//	m_textureHeight = tex_height;
-//	m_width = width;
-//	m_height = height;
-//
-//	glGenVertexArrays(1, &m_vao);
-//
-//	m_frameWidth = { m_width / m_textureWidth };
-//	m_frameHeight = { m_height / m_textureHeight };
-//
-//
-//	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer);
-//	objectCount++;
-//	objects.reserve(objectCount);
-//}
-//
-//Actor::Actor(GLuint& texture, int tex_width, int tex_height, float width, float height, float layer, std::vector<Actor>& objects, float x, float y, bool animate)
-//	:m_model(1.0f), p_texture{ &texture }, m_textureWidth{ tex_width }, m_textureHeight{ tex_height }, m_width{ width }, m_height{ height },
-//	m_orderInLayer{ (layer / 10) }, m_indices{ 0, 1, 3, 1, 2, 3 }, animate{ animate }, m_vao{}
-//{
-//
-//	glGenVertexArrays(1, &m_vao);
-//
-//	m_frameWidth = { m_width / m_textureWidth };
-//	m_frameHeight = { m_height / m_textureHeight };
-//
-//	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer);
-//	objectCount++;
-//	objects.reserve(objectCount);
-//
-//	m_model = glm::translate(m_model, glm::vec3(x, y, 0.0f));
-//}
+Actor::Actor(GLuint& texture, int tex_width, int tex_height, float tileSize, float tilesX, float tilesY, float start_index, float layer, bool flip, std::vector<Object>& objects, float x, float y, bool banimate, std::string name)
+	:m_id{ objectCount }
+{
+	p_texture = &texture;
+	m_textureWidth = tex_width;
+	m_textureHeight = tex_height;
+	m_width = tileSize;
+	m_height = tileSize;
+	m_orderInLayer = layer / 10;
+	m_indices = { 0, 1, 3, 1, 2, 3 };
+	animate = banimate;
+	m_name = name;
 
-//glm::mat4 Actor::model()
-//{
-//	return m_model;
-//}
-//
-//size_t Actor::vertexBufferSize()
-//{
-//	return m_vertices.size();
-//}
-//
-//float* Actor::vertices()
-//{
-//	return m_vertices.data();
-//}
-//
-//size_t Actor::indexBufferSize()
-//{
-//	return m_indices.size();
-//}
-//
-//unsigned int* Actor::indices()
-//{
-//	return m_indices.data();
-//}
-//
-//float Actor::layer()
-//{
-//	return m_orderInLayer;
-//}
-//
-//GLuint Actor::texture()
-//{
-//	return *p_texture;
-//}
-//
-//GLuint Actor::vao()
-//{
-//	return m_vao;
-//}
-//
-//float Actor::frameWidth()
-//{
-//	return m_frameWidth;
-//}
-//
-//float Actor::frameHeight()
-//{
-//	return m_frameHeight;
-//}
+	glGenVertexArrays(1, &m_vao);
+
+	unsigned int offset_x = static_cast<unsigned int>(remainderf(start_index, (tex_width/ tileSize)));
+	unsigned int offset_y = static_cast<unsigned int>(start_index / (tex_width/ tileSize));
+
+	m_frameWidth = { m_width / m_textureWidth };
+	m_frameHeight = { m_height / m_textureHeight };
+
+	PopulateVertices(m_vertices, m_width, m_height, m_frameWidth, m_frameHeight, m_orderInLayer, offset_x, offset_y, tilesX, tilesY, flip);
+	objectCount++;
+	objects.reserve(objectCount);
+
+	m_model = glm::translate(m_model, glm::vec3(x, y, 0.0f));
+}
 
 void Actor::printVs() {
 	for (int i = 0; i < m_vertices.size(); i++)
@@ -202,8 +149,4 @@ unsigned int Actor::id()
 {
 	return m_id;
 }
-
-//unsigned int Actor::objectCount = 0;
-
-
 
